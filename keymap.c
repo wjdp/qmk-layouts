@@ -17,6 +17,11 @@
 #include QMK_KEYBOARD_H
 #include "keymap_uk.h"
 
+void eeconfig_init_user(void) {  // EEPROM is getting reset!
+  // use the non noeeprom versions, to write these values to EEPROM too
+  rgblight_enable(); // Enable RGB by default
+  rgblight_sethsv_white();  // Set it to white by default
+}
 
 enum planck_layers {
   _QWERTY,
@@ -27,13 +32,12 @@ enum planck_layers {
 
 enum planck_keycodes {
   QWERTY = SAFE_RANGE,
-  BACKLIT
+  BACKLIT,
+  TODO
 };
 
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
-
-const uint16_t TODO = KC_NO;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -132,7 +136,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #endif
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  layer_state_t adjusted_state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  rgblight_config_t rgblight_config;
+  switch(biton32(adjusted_state)) {
+    case _LOWER:
+      // Green
+      rgblight_enable_noeeprom();
+      rgblight_sethsv_noeeprom(HSV_GREEN);
+      break;
+    case _RAISE:
+      // Red
+      rgblight_enable_noeeprom();
+      rgblight_sethsv_noeeprom(HSV_YELLOW);
+      break;
+    case _ADJUST:
+      // Blue
+      rgblight_enable_noeeprom();
+      rgblight_sethsv_noeeprom(HSV_BLUE);
+      break;
+    default:
+      // White
+      //Read RGB Light State
+      rgblight_config.raw = eeconfig_read_rgblight();
+      //If enabled, set white
+      if (rgblight_config.enable) {
+          rgblight_sethsv_noeeprom(HSV_WHITE);
+      } else { //Otherwise go back to disabled
+          rgblight_disable_noeeprom();
+      }
+      break;
+  }
+  return adjusted_state;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -161,6 +195,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case TODO:
+      PLAY_SONG(plover_gb_song);
+      return false;
   }
   return true;
 }
@@ -193,7 +230,7 @@ void matrix_scan_user(void) {
     switch (layer) {
         case _ADJUST:
             // INSERT CODE HERE: turn on leds that correspond to YOUR_LAYER_1
-            PLAY_SONG(plover_gb_song);
+            PLAY_SONG(plover_song);
         // add case for each layer
     }
 };
