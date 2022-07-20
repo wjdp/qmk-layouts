@@ -31,7 +31,6 @@ enum planck_layers {
   _RAISE,
   _ADJUST,
   _WM,
-  _SONGS,
 };
 
 enum planck_keycodes {
@@ -43,14 +42,6 @@ enum planck_keycodes {
   SN_0002,
   SN_0003,
   SN_0004,
-  SN_0005,
-  SN_0006,
-  SN_0007,
-  SN_0008,
-  SN_0009,
-  SN_0010,
-  SN_0011,
-  SN_0012,
 };
 
 #define LOWER MO(_LOWER)
@@ -70,10 +61,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
-  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,           KC_SCLN,    KC_BSPC,
-  KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,           KC_P,       KC_QUOT,
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,         KC_SLSH,    KC_ENT ,
-  CAPSKEY, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   KC_SPC,  KC_SPC,  RAISE,   MO(_WM), KC_APPLICATION, MO(_SONGS), KC_RGHT
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN,    KC_BSPC,
+  KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,       KC_QUOT,
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    KC_ENT ,
+  CAPSKEY, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   KC_SPC,  KC_SPC,  RAISE,   MO(_WM), KC_LEAD, OSM(KC_MEH),KC_RGHT
 ),
 
 /* Lower
@@ -139,10 +130,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_planck_grid(
-  _______, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, _______, _______, _______, _______,  _______, _______,    _______,
-  QK_BOOT, _______, I3_WN_L, I3_WN_D, I3_WN_R, _______, KC_VOLU, KC_LSFT, KC_LCTL,  _______, KC_PSCREEN, _______,
-  _______, _______, _______, CAPSWRD, _______, _______, KC_VOLD, _______, _______,  _______, _______,    _______,
-  _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,    _______
+  _______, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, _______, _______, _______, _______,  _______, _______,    SN_0001,
+  QK_BOOT, _______, I3_WN_L, I3_WN_D, I3_WN_R, _______, KC_VOLU, KC_LSFT, KC_LCTL,  _______, KC_PSCREEN, SN_0002,
+  _______, AU_ON,   AU_OFF,  CK_TOGG, CK_UP,   CK_DOWN, KC_VOLD, _______, _______,  _______, _______,    SN_0003,
+  _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,    SN_0004
 ),
 
 [_WM] = LAYOUT_planck_grid(
@@ -150,13 +141,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, I3_WS_1, I3_WS_2, I3_WS_3, I3_WS_4, I3_WS_A, I3_WS_B, I3_WS_11, I3_WS_12, I3_WS_13, I3_WS_14, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,     I3_TERM,
   _______, _______, _______, KC_LALT, I3_LAST, I3_WIND, I3_WIND, I3_UGNT, _______, _______, _______,     _______
-),
-
-[_SONGS] = LAYOUT_planck_grid(
-  _______, SN_0001, SN_0002, SN_0003, SN_0004, _______, _______, _______, _______,  _______, _______, _______,
-  _______, SN_0005, SN_0006, SN_0007, SN_0008, _______, _______, _______, _______,  _______, _______, _______,
-  _______, SN_0009, SN_0010, SN_0011, SN_0012, _______, _______, _______, _______,  _______, _______, _______,
-  _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______
 ),
 
 };
@@ -167,60 +151,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #endif
 
 // array of songs
-float song_1[][2] = SONG(WP_CLOSE_ENCOUNTERS_5_NOTE);
-float song_2[][2] =  SONG(WP_DOE_A_DEER);
-float song_3[][2] =  SONG(WP_IMPERIAL_MARCH);
-float song_4[][2] =  SONG(WP_BASKET_CASE);
+float song_1[][2] = SONG(WP_MARIO_MUSHROOM);
+float song_2[][2] =  SONG(WP_MEGALOVANIA);
+float song_3[][2] =  SONG(USSR_ANTHEM);
+float song_4[][2] =  SONG(WP_RICK_ROLL);
 
-float song_5[][2] =  SONG(WP_ONE_UP_SOUND);
-float song_6[][2] =  SONG(WP_MARIO_THEME);
-float song_7[][2] =  SONG(WP_MARIO_MUSHROOM);
-float song_8[][2] = SONG(WP_VICTORY_FANFARE_SHORT);
-
-float song_9[][2] =  SONG(WP_ALL_STAR);
-float song_10[][2] =  SONG(WP_MEGALOVANIA);
-float song_11[][2] =  SONG(USSR_ANTHEM);
-float song_12[][2] =  SONG(WP_RICK_ROLL);
-
-
+void set_backlight_for_layer(uint8_t hue, uint8_t sat, uint8_t val) {
+  rgblight_enable_noeeprom();
+  rgblight_sethsv_noeeprom(hue, sat, val);
+} 
 
 layer_state_t layer_state_set_user(layer_state_t state) {
   layer_state_t adjusted_state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
-  rgblight_config_t rgblight_config;
   switch(biton32(adjusted_state)) {
     case _LOWER:
-      // Green
-      rgblight_enable_noeeprom();
-      rgblight_sethsv_noeeprom(HSV_GREEN);
+      set_backlight_for_layer(HSV_GREEN);
       break;
     case _RAISE:
-      // Red
-      rgblight_enable_noeeprom();
-      rgblight_sethsv_noeeprom(HSV_YELLOW);
+      set_backlight_for_layer(HSV_YELLOW);
       break;
     case _ADJUST:
-      // Blue
-      rgblight_enable_noeeprom();
-      rgblight_sethsv_noeeprom(HSV_BLUE);
+      set_backlight_for_layer(HSV_BLUE);
       break;
     case _WM:
-      rgblight_enable_noeeprom();
-      rgblight_sethsv_noeeprom(HSV_MAGENTA);
-      break;
-    case _SONGS:
-      rgblight_enable_noeeprom();
-      rgblight_sethsv_noeeprom(HSV_PINK);
+      set_backlight_for_layer(HSV_MAGENTA);
       break;
     default:
-      // White
-      //Read RGB Light State
-      rgblight_config.raw = eeconfig_read_rgblight();
-      //If enabled, set white
-      if (rgblight_config.enable) {
-          rgblight_sethsv_noeeprom(HSV_WHITE);
-      } else { //Otherwise go back to disabled
-          rgblight_disable_noeeprom();
-      }
+      rgblight_disable_noeeprom();
       break;
   }
   return adjusted_state;
@@ -235,27 +192,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case BACKLIT:
-      if (record->event.pressed) {
-        register_code(KC_RSFT);
-        #ifdef BACKLIGHT_ENABLE
-          backlight_step();
-        #endif
-        #ifdef KEYBOARD_planck_rev5
-          writePinLow(E6);
-        #endif
-      } else {
-        unregister_code(KC_RSFT);
-        #ifdef KEYBOARD_planck_rev5
-          writePinHigh(E6);
-        #endif
-      }
-      return false;
-      break;
     case WP_TODO:
       PLAY_SONG(plover_gb_song);
       return false;
-    // Play songs from _SONGS layer, there are 12 songs
     case SN_0001:
       PLAY_SONG(song_1);
       return false;
@@ -268,48 +207,77 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case SN_0004:
       PLAY_SONG(song_4);
       return false;
-    case SN_0005:
-      PLAY_SONG(song_5);
-      return false;
-    case SN_0006:
-      PLAY_SONG(song_6);
-      return false;
-    case SN_0007:
-      PLAY_SONG(song_7);
-      return false;
-    case SN_0008:
-      PLAY_SONG(song_8);
-      return false;
-    case SN_0009:
-      PLAY_SONG(song_9);
-      return false;
-    case SN_0010:
-      PLAY_SONG(song_10);
-      return false;
-    case SN_0011:
-      PLAY_SONG(song_11);
-      return false;
-    case SN_0012:
-      PLAY_SONG(song_12);
-      return false;
   }
   return true;
 }
 
+LEADER_EXTERNS();
 
-bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (clockwise) {
-      #ifdef MOUSEKEY_ENABLE
-        tap_code(KC_MS_WH_DOWN);
-      #else
-        tap_code(KC_PGDN);
-      #endif
-    } else {
-      #ifdef MOUSEKEY_ENABLE
-        tap_code(KC_MS_WH_UP);
-      #else
-        tap_code(KC_PGUP);
-      #endif
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+    SEQ_ONE_KEY(KC_Q) {
+      // Anything you can do in a macro.
+      SEND_STRING("QMK is awesome.");
     }
-    return true;
+    // Select whole line
+    SEQ_TWO_KEYS(KC_D, KC_D) {
+      tap_code(KC_HOME);
+      register_code(KC_LEFT_SHIFT);
+      tap_code(KC_END);
+      unregister_code(KC_LEFT_SHIFT);
+    }
+    // Select to start of line
+    SEQ_TWO_KEYS(KC_D, KC_W) {
+      register_code(KC_LEFT_SHIFT);
+      tap_code(KC_HOME);
+      unregister_code(KC_LEFT_SHIFT);
+    }
+    // Select to end of line
+    SEQ_TWO_KEYS(KC_D, KC_R) {
+      register_code(KC_LEFT_SHIFT);
+      tap_code(KC_END);
+      unregister_code(KC_LEFT_SHIFT);
+    }
+    // Select word
+    SEQ_TWO_KEYS(KC_D, KC_E) {
+      register_code(KC_LEFT_CTRL);
+      tap_code(KC_LEFT);
+      register_code(KC_LEFT_SHIFT);
+      tap_code(KC_RIGHT);
+      unregister_code(KC_LEFT_CTRL);
+      unregister_code(KC_LEFT_SHIFT);
+    }
+    // Select to start of word
+    SEQ_TWO_KEYS(KC_D, KC_S) {
+      register_code(KC_LEFT_SHIFT);
+      register_code(KC_LEFT_CTRL);
+      tap_code(KC_LEFT);
+      unregister_code(KC_LEFT_CTRL);
+      unregister_code(KC_LEFT_SHIFT);
+    }
+    // Select to end of word
+    SEQ_TWO_KEYS(KC_D, KC_F) {
+      register_code(KC_LEFT_SHIFT);
+      register_code(KC_LEFT_CTRL);
+      tap_code(KC_RIGHT);
+      unregister_code(KC_LEFT_CTRL);
+      unregister_code(KC_LEFT_SHIFT);
+    }
+    // Setup a 1,2 terminal workspace
+    SEQ_TWO_KEYS(KC_W, KC_T) {
+      register_code(KC_LGUI);
+      tap_code(KC_ENTER);
+      tap_code(KC_ENTER);
+      wait_ms(100);
+      tap_code(KC_V);
+      tap_code(KC_ENTER);
+      wait_ms(100);
+      tap_code(KC_UP);
+      tap_code(KC_LEFT);
+      unregister_code(KC_LGUI);
+    }
+  }
 }
