@@ -50,5 +50,9 @@
 
 #define AUDIO_CLICKY
 
+// Leader key for sequences
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 300
+
+// For tap-dance
+#define TAPPING_TERM 175
