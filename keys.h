@@ -1,5 +1,6 @@
 #pragma once
 
+#define ESCKEY LT(_MOUSE, KC_ESC)
 #define CAPSKEY OSM(MOD_LSFT)
 
 #define I3_QUIT LGUI(KC_Q)

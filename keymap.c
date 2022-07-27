@@ -31,6 +31,7 @@ enum planck_layers {
   _RAISE,
   _ADJUST,
   _WM,
+  _MOUSE,
 };
 
 enum planck_keycodes {
@@ -76,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_QWERTY] = LAYOUT_planck_grid(
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN,    KC_BSPC,
-  KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,       KC_QUOT,
+  ESCKEY,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,       KC_QUOT,
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    KC_ENT ,
   CAPSKEY, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   KC_SPC,  KC_SPC,  RAISE,   MO(_WM), KC_LEAD, OSM(KC_MEH),KC_RGHT
 ),
@@ -157,6 +158,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, KC_LALT, I3_LAST, I3_WIND, I3_WIND, I3_UGNT, _______, _______, _______,     _______
 ),
 
+/* Mouse layer
+ * ,---------------------------------------------------------------------------------------------------------.
+ * |      |        |        |        |        |        |        | Whl Up | M Up   | Whl Dn | PageUp |        |
+ * |------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------|
+ * |      |        |        |        |        |        | Ctrl   | M Left | M Down | M Right| PageDn |        |
+ * |------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------|
+ * |      |        |        |        |        |        | WWWBk  | WWWFw  |        |        |        |        |
+ * |------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------|
+ * |      |        | Acclr1 | Acclr2 | Acclr3 | Click button 1  | CBtn2  | CBtn3  |        |        |        |
+ * ,---------------------------------------------------------------------------------------------------------.
+ */
+[_MOUSE] = LAYOUT_planck_grid(
+  _______, _______, _______, _______, _______, _______, _______, KC_WH_U, KC_MS_U, KC_WH_D, _______, _______,
+  _______, _______, _______, _______, _______, _______, KC_LCTL, KC_MS_L, KC_MS_D, KC_MS_R, KC_PGUP, _______,
+  _______, _______, _______, _______, _______, _______, KC_WBAK, KC_WFWD, _______, _______, KC_PGDN, _______,
+  _______, _______, KC_ACL0, KC_ACL1, KC_ACL2, KC_BTN1, KC_BTN1, KC_BTN2, KC_BTN3, _______, _______, _______
+),
+
 };
 
 #ifdef AUDIO_ENABLE
@@ -189,6 +208,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
       break;
     case _WM:
       set_backlight_for_layer(HSV_MAGENTA);
+      break;
+    case _MOUSE:
+      set_backlight_for_layer(HSV_CYAN);
       break;
     default:
       rgblight_disable_noeeprom();
