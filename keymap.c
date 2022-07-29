@@ -52,6 +52,8 @@ enum planck_keycodes {
 enum tap_dance_keys {
   TD_SYM3,
   TD_SYM4,
+  TD_LDBR,
+  TD_RDBR,
 };
 
 // Tap dance definitions
@@ -59,6 +61,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Escape, twice for Caps Lock
     [TD_SYM3] = ACTION_TAP_DANCE_DOUBLE(UK_PERC, UK_PND),
     [TD_SYM4] = ACTION_TAP_DANCE_DOUBLE(UK_CIRC, UK_DLR),
+    [TD_LDBR] = ACTION_TAP_DANCE_DOUBLE(UK_LBRC, UK_LABK),
+    [TD_RDBR] = ACTION_TAP_DANCE_DOUBLE(UK_RBRC, UK_RABK),
 };
 
 
@@ -101,10 +105,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // ),
 
 [_LOWER] = LAYOUT_planck_grid(
-  UK_GRV,   KC_EXLM,  KC_HOME,       KC_UP,    KC_END,         TD(TD_SYM3), TD(TD_SYM4), KC_AMPR,  KC_ASTR,   KC_LCBR,        KC_RCBR,        _______,
-  _______,  KC_ENTER, KC_LEFT,       KC_DOWN,  KC_RIGHT,       KC_UNDS,     KC_COLN,     KC_MINUS, KC_EQUAL,  KC_LPRN,        KC_RPRN,        UK_DQUO,
-  _______,  UK_BSLS,  LCTL(KC_LEFT), XXXXXXX,  LCTL(KC_RIGHT), UK_PIPE,     KC_PLUS,     UK_HASH,  UK_TILD,   KC_LBRC,        KC_RBRC,        _______,
-  _______,  _______,  _______,       _______,  _______,        _______,     _______,   _______,  _______,   LSFT(KC_RALT),  _______,        CAPSWRD
+  UK_GRV,   KC_EXLM,  KC_HOME,       KC_UP,    KC_END,         TD(TD_SYM3), TD(TD_SYM4), KC_AMPR,  KC_ASTR,   KC_LCBR,        KC_RCBR,      _______,
+  _______,  KC_ENTER, KC_LEFT,       KC_DOWN,  KC_RIGHT,       KC_UNDS,     KC_COLN,     KC_MINUS, KC_EQUAL,  KC_LPRN,        KC_RPRN,      UK_DQUO,
+  _______,  UK_BSLS,  LCTL(KC_LEFT), XXXXXXX,  LCTL(KC_RIGHT), UK_PIPE,     KC_PLUS,     UK_HASH,  UK_TILD,   TD(TD_LDBR),    TD(TD_RDBR),  _______,
+  _______,  _______,  _______,       _______,  _______,        _______,     _______,     _______,  _______,   LSFT(KC_RALT),  _______,      CAPSWRD
 ),
 
 /* Raise
