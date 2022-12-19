@@ -22,7 +22,8 @@
 void eeconfig_init_user(void) {  // EEPROM is getting reset!
   // use the non noeeprom versions, to write these values to EEPROM too
   rgblight_enable(); // Enable RGB by default
-  rgblight_sethsv_white();  // Set it to white by default
+  // Newer QMK doesn't have this, unsure if needed
+  // rgblight_sethsv_white();  // Set it to white by default
 }
 
 enum planck_layers {
@@ -133,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,  KC_F1,    KC_F2,         KC_F3,    KC_F4,          KC_NO,       KC_KP_ASTERISK, KC_7,     KC_8,  KC_9,   KC_KP_MINUS,  _______,
   _______,  KC_F5,    KC_F6,         KC_F7,    KC_F8,          KC_NO,       KC_KP_SLASH,    KC_4,     KC_5,  KC_6,   KC_0,         KC_DELETE,
   _______,  KC_F9,    KC_F10,        KC_F11,   KC_F12,         KC_NO,       KC_EQUAL,       KC_1,     KC_2,  KC_3,   KC_KP_PLUS,   _______,
-  _______,  _______,  _______,       _______,  _______,        _______,     _______,        _______,  KC_0,  KC_DOT, _______,      KC_CAPSLOCK
+  _______,  _______,  _______,       _______,  _______,        _______,     _______,        _______,  KC_0,  KC_DOT, _______,      KC_CAPS_LOCK
 ),
 
 /* Adjust (Lower + Raise)
@@ -149,10 +150,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_planck_grid(
-  _______, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, _______, _______, _______, _______,  _______, KC_INS,     KC_DELETE,
-  QK_BOOT, _______, I3_WN_L, I3_WN_D, I3_WN_R, _______, KC_VOLU, KC_LSFT, KC_LCTL,  _______, KC_PSCREEN, SN_0002,
-  _______, AU_ON,   AU_OFF,  CK_TOGG, CK_UP,   CK_DOWN, KC_VOLD, _______, _______,  _______, _______,    SN_0003,
-  _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,    SN_0004
+  _______, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, _______, _______, _______, _______, _______, KC_INS,  KC_DELETE,
+  QK_BOOT, _______, I3_WN_L, I3_WN_D, I3_WN_R, _______, KC_VOLU, KC_LSFT, KC_LCTL, _______, KC_PSCR, SN_0002,
+  _______, AU_ON,   AU_OFF,  CK_TOGG, CK_UP,   CK_DOWN, KC_VOLD, _______, _______, _______, _______, SN_0003,
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, SN_0004
 ),
 
 [_WM] = LAYOUT_planck_grid(
