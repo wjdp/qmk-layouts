@@ -58,7 +58,7 @@ enum tap_dance_keys {
 };
 
 // Tap dance definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
+tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Escape, twice for Caps Lock
     [TD_SYM3] = ACTION_TAP_DANCE_DOUBLE(UK_PERC, UK_PND),
     [TD_SYM4] = ACTION_TAP_DANCE_DOUBLE(UK_CIRC, UK_DLR),
@@ -84,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN,    KC_BSPC,
   ESCKEY,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,       KC_QUOT,
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    KC_ENT ,
-  CAPSKEY, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   KC_SPC,  KC_SPC,  RAISE,   MO(_WM), KC_LEAD, OSM(KC_MEH),KC_RGHT
+  CAPSKEY, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   KC_SPC,  KC_SPC,  RAISE,   MO(_WM), _______, OSM(KC_MEH),KC_RGHT
 ),
 
 /* Lower
@@ -107,9 +107,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_LOWER] = LAYOUT_planck_grid(
   UK_GRV,   KC_EXLM,  KC_HOME,       KC_UP,    KC_END,         TD(TD_SYM3), TD(TD_SYM4), KC_AMPR,  KC_ASTR,   KC_LCBR,        KC_RCBR,      _______,
-  _______,  KC_ENTER, KC_LEFT,       KC_DOWN,  KC_RIGHT,       KC_UNDS,     KC_COLN,     KC_MINUS, KC_EQUAL,  KC_LPRN,        KC_RPRN,      UK_DQUO,
+  KC_BSPC,  KC_ENTER, KC_LEFT,       KC_DOWN,  KC_RIGHT,       KC_UNDS,     KC_COLN,     KC_MINUS, KC_EQUAL,  KC_LPRN,        KC_RPRN,      UK_DQUO,
   _______,  UK_BSLS,  LCTL(KC_LEFT), XXXXXXX,  LCTL(KC_RIGHT), UK_PIPE,     KC_PLUS,     UK_HASH,  UK_TILD,   TD(TD_LDBR),    TD(TD_RDBR),  _______,
-  _______,  _______,  _______,       _______,  _______,        _______,     _______,     _______,  _______,   LSFT(KC_RALT),  _______,      CAPSWRD
+  _______,  _______,  _______,       _______,  _______,        _______,     _______,     _______,  _______,   LSFT(KC_RALT),  _______,      CW_TOGG
 ),
 
 /* Raise
@@ -252,73 +252,73 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   return true;
 }
 
-LEADER_EXTERNS();
+// LEADER_EXTERNS();
 
 void matrix_scan_user(void) {
-  LEADER_DICTIONARY() {
-    leading = false;
-    leader_end();
+  // LEADER_DICTIONARY() {
+  //   leading = false;
+  //   leader_end();
 
-    SEQ_ONE_KEY(KC_Q) {
-      // Anything you can do in a macro.
-      SEND_STRING("QMK is awesome.");
-    }
-    // Select whole line
-    SEQ_TWO_KEYS(KC_D, KC_D) {
-      tap_code(KC_HOME);
-      register_code(KC_LEFT_SHIFT);
-      tap_code(KC_END);
-      unregister_code(KC_LEFT_SHIFT);
-    }
-    // Select to start of line
-    SEQ_TWO_KEYS(KC_D, KC_W) {
-      register_code(KC_LEFT_SHIFT);
-      tap_code(KC_HOME);
-      unregister_code(KC_LEFT_SHIFT);
-    }
-    // Select to end of line
-    SEQ_TWO_KEYS(KC_D, KC_R) {
-      register_code(KC_LEFT_SHIFT);
-      tap_code(KC_END);
-      unregister_code(KC_LEFT_SHIFT);
-    }
-    // Select word
-    SEQ_TWO_KEYS(KC_D, KC_E) {
-      register_code(KC_LEFT_CTRL);
-      tap_code(KC_LEFT);
-      register_code(KC_LEFT_SHIFT);
-      tap_code(KC_RIGHT);
-      unregister_code(KC_LEFT_CTRL);
-      unregister_code(KC_LEFT_SHIFT);
-    }
-    // Select to start of word
-    SEQ_TWO_KEYS(KC_D, KC_S) {
-      register_code(KC_LEFT_SHIFT);
-      register_code(KC_LEFT_CTRL);
-      tap_code(KC_LEFT);
-      unregister_code(KC_LEFT_CTRL);
-      unregister_code(KC_LEFT_SHIFT);
-    }
-    // Select to end of word
-    SEQ_TWO_KEYS(KC_D, KC_F) {
-      register_code(KC_LEFT_SHIFT);
-      register_code(KC_LEFT_CTRL);
-      tap_code(KC_RIGHT);
-      unregister_code(KC_LEFT_CTRL);
-      unregister_code(KC_LEFT_SHIFT);
-    }
-    // Setup a 1,2 terminal workspace
-    SEQ_TWO_KEYS(KC_W, KC_T) {
-      register_code(KC_LGUI);
-      tap_code(KC_ENTER);
-      tap_code(KC_ENTER);
-      wait_ms(100);
-      tap_code(KC_V);
-      tap_code(KC_ENTER);
-      wait_ms(100);
-      tap_code(KC_UP);
-      tap_code(KC_LEFT);
-      unregister_code(KC_LGUI);
-    }
-  }
+  //   SEQ_ONE_KEY(KC_Q) {
+  //     // Anything you can do in a macro.
+  //     SEND_STRING("QMK is awesome.");
+  //   }
+  //   // Select whole line
+  //   SEQ_TWO_KEYS(KC_D, KC_D) {
+  //     tap_code(KC_HOME);
+  //     register_code(KC_LEFT_SHIFT);
+  //     tap_code(KC_END);
+  //     unregister_code(KC_LEFT_SHIFT);
+  //   }
+  //   // Select to start of line
+  //   SEQ_TWO_KEYS(KC_D, KC_W) {
+  //     register_code(KC_LEFT_SHIFT);
+  //     tap_code(KC_HOME);
+  //     unregister_code(KC_LEFT_SHIFT);
+  //   }
+  //   // Select to end of line
+  //   SEQ_TWO_KEYS(KC_D, KC_R) {
+  //     register_code(KC_LEFT_SHIFT);
+  //     tap_code(KC_END);
+  //     unregister_code(KC_LEFT_SHIFT);
+  //   }
+  //   // Select word
+  //   SEQ_TWO_KEYS(KC_D, KC_E) {
+  //     register_code(KC_LEFT_CTRL);
+  //     tap_code(KC_LEFT);
+  //     register_code(KC_LEFT_SHIFT);
+  //     tap_code(KC_RIGHT);
+  //     unregister_code(KC_LEFT_CTRL);
+  //     unregister_code(KC_LEFT_SHIFT);
+  //   }
+  //   // Select to start of word
+  //   SEQ_TWO_KEYS(KC_D, KC_S) {
+  //     register_code(KC_LEFT_SHIFT);
+  //     register_code(KC_LEFT_CTRL);
+  //     tap_code(KC_LEFT);
+  //     unregister_code(KC_LEFT_CTRL);
+  //     unregister_code(KC_LEFT_SHIFT);
+  //   }
+  //   // Select to end of word
+  //   SEQ_TWO_KEYS(KC_D, KC_F) {
+  //     register_code(KC_LEFT_SHIFT);
+  //     register_code(KC_LEFT_CTRL);
+  //     tap_code(KC_RIGHT);
+  //     unregister_code(KC_LEFT_CTRL);
+  //     unregister_code(KC_LEFT_SHIFT);
+  //   }
+  //   // Setup a 1,2 terminal workspace
+  //   SEQ_TWO_KEYS(KC_W, KC_T) {
+  //     register_code(KC_LGUI);
+  //     tap_code(KC_ENTER);
+  //     tap_code(KC_ENTER);
+  //     wait_ms(100);
+  //     tap_code(KC_V);
+  //     tap_code(KC_ENTER);
+  //     wait_ms(100);
+  //     tap_code(KC_UP);
+  //     tap_code(KC_LEFT);
+  //     unregister_code(KC_LGUI);
+  //   }
+  // }
 }
