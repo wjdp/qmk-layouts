@@ -16,8 +16,36 @@ enum layers {
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
+void set_backlight_for_layer(uint8_t hue, uint8_t sat, uint8_t val) {
+  rgblight_enable_noeeprom();
+  rgblight_sethsv_noeeprom(hue, sat, val);
+} 
+
+
 layer_state_t layer_state_set_user(layer_state_t state) {
   layer_state_t adjusted_state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  #ifdef KEYBOARD_planck_rev6_drop
+    switch(biton32(adjusted_state)) {
+      case _LOWER:
+        set_backlight_for_layer(HSV_GREEN);
+        break;
+      case _RAISE:
+        set_backlight_for_layer(HSV_YELLOW);
+        break;
+      case _ADJUST:
+        set_backlight_for_layer(HSV_BLUE);
+        break;
+      case _WM:
+        set_backlight_for_layer(HSV_MAGENTA);
+        break;
+      case _MOUSE:
+        set_backlight_for_layer(HSV_CYAN);
+        break;
+      default:
+        rgblight_disable_noeeprom();
+        break;
+    }
+  #endif
   return adjusted_state;
 }
 
@@ -33,11 +61,6 @@ enum keycodes {
   QWERTY = SAFE_RANGE,
   BACKLIT,
   WP_TODO,
-
-  SN_0001,
-  SN_0002,
-  SN_0003,
-  SN_0004,
 };
 
 // Tap dance definitions
@@ -89,9 +112,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void keyboard_post_init_user(void) {
-  // Default LEDs off, no animations or backlight
-  rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-  rgb_matrix_sethsv_noeeprom(HSV_OFF);
+  #ifdef KEYBOARD_boardsource_equals_48
+    // Default LEDs off, no animations or backlight
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(HSV_OFF);
+  #endif
 }
 
 static float disabled_key_sound[][2] = SONG(AG_NORM_SOUND);
@@ -152,6 +177,7 @@ void dynamic_macro_record_end_user(int8_t direction) {
 #define CL_VUP {100, 255, 50}
 #define CL_VDN {255, 100, 50}
 
+#ifdef KEYBOARD_boardsource_equals_48
 // Define an 2d array of RGB LED colours with rows and columns
 const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
   [_QWERTY] = {
@@ -191,6 +217,7 @@ const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
     {CL_OFF, CL_OFF, CL_MAG, CL_MAG, CL_MAG, CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_OFF, CL_OFF}, 
   },
 };
+#endif
 
 bool caps_word_active = false;
 void caps_word_set_user(bool active) {caps_word_active = active;}
@@ -198,7 +225,7 @@ void caps_word_set_user(bool active) {caps_word_active = active;}
 uint8_t mods_active = 0;
 void oneshot_mods_changed_user(uint8_t mods) {mods_active = mods;}
 
-
+#ifdef KEYBOARD_boardsource_equals_48
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
   // loop over all values between led_min and led_max
   // setting the colour of each LED to the colour of the corresponding key
@@ -260,3 +287,4 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 // Turn off the backlight when the host goes to sleep
 void suspend_power_down_kb(void) {rgb_matrix_set_suspend_state(true);}
 void suspend_wakeup_init_kb(void) {rgb_matrix_set_suspend_state(false);}
+#endif
