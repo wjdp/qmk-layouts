@@ -16,43 +16,6 @@ enum layers {
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
-void clear_backlight(void) {
-  rgblight_disable_noeeprom();
-}
-
-void set_backlight_for_layer(uint8_t hue, uint8_t sat, uint8_t val) {
-  rgblight_enable_noeeprom();
-  rgblight_sethsv_noeeprom(hue, sat, val);
-} 
-
-
-layer_state_t layer_state_set_user(layer_state_t state) {
-  layer_state_t adjusted_state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
-  #ifdef KEYBOARD_planck_rev6_drop
-    switch(biton32(adjusted_state)) {
-      case _LOWER:
-        set_backlight_for_layer(HSV_GREEN);
-        break;
-      case _RAISE:
-        set_backlight_for_layer(HSV_YELLOW);
-        break;
-      case _ADJUST:
-        set_backlight_for_layer(HSV_BLUE);
-        break;
-      case _WM:
-        set_backlight_for_layer(HSV_MAGENTA);
-        break;
-      case _MOUSE:
-        set_backlight_for_layer(HSV_CYAN);
-        break;
-      default:
-        clear_backlight();
-        break;
-    }
-  #endif
-  return adjusted_state;
-}
-
 // Tap dance declarations
 enum tap_dance_keys {
   TD_SYM3,
@@ -115,17 +78,69 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 };
 
-void keyboard_post_init_user(void) {
-  set_single_persistent_default_layer(_QWERTY);
-  #ifdef KEYBOARD_planck_rev6_drop
-    clear_backlight();
-  #endif
-  #ifdef KEYBOARD_boardsource_equals_48
-    // Default LEDs off, no animations or backlight
-    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    rgb_matrix_sethsv_noeeprom(HSV_OFF);
-  #endif
+
+bool isRecording = false;
+bool isRecordingLedOn = false;
+#define RECORDING_FLASH_INTERVAL 500
+static uint16_t recording_timer;
+
+// Listener function => Triggered when you start recording a macro.
+void dynamic_macro_record_start_user(int8_t direction) {
+  isRecording = true;
+  isRecordingLedOn = true;
+  // timer_read() is a built-in function in qmk. => It read the current time
+  recording_timer = timer_read();
 }
+
+// Listener function => Triggered when the macro recording is stopped.
+void dynamic_macro_record_end_user(int8_t direction) {
+  isRecording = false;
+  isRecordingLedOn = false;
+}
+
+bool caps_word_active = false;
+void caps_word_set_user(bool active) {caps_word_active = active;}
+
+uint8_t mods_active = 0;
+void oneshot_mods_changed_user(uint8_t mods) {mods_active = mods;}
+
+
+void clear_backlight(void) {
+  rgblight_disable_noeeprom();
+}
+
+void set_backlight_for_layer(uint8_t hue, uint8_t sat, uint8_t val) {
+  rgblight_enable_noeeprom();
+  rgblight_sethsv_noeeprom(hue, sat, val);
+} 
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+  layer_state_t adjusted_state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  #ifdef KEYBOARD_planck_rev6_drop
+    switch(biton32(adjusted_state)) {
+      case _LOWER:
+        set_backlight_for_layer(HSV_GREEN);
+        break;
+      case _RAISE:
+        set_backlight_for_layer(HSV_YELLOW);
+        break;
+      case _ADJUST:
+        set_backlight_for_layer(HSV_BLUE);
+        break;
+      case _WM:
+        set_backlight_for_layer(HSV_MAGENTA);
+        break;
+      case _MOUSE:
+        set_backlight_for_layer(HSV_CYAN);
+        break;
+      default:
+        clear_backlight();
+        break;
+    }
+  #endif
+  return adjusted_state;
+}
+
 
 static float disabled_key_sound[][2] = SONG(AG_NORM_SOUND);
 bool pressed_disabled_key = false;
@@ -147,29 +162,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-bool isRecording = false;
-bool isRecordingLedOn = false;
-#define RECORDING_FLASH_INTERVAL 500
-static uint16_t recording_timer;
-
-// Listener function => Triggered when you start recording a macro.
-void dynamic_macro_record_start_user(int8_t direction) {
-  isRecording = true;
-  isRecordingLedOn = true;
-  // timer_read() is a built-in function in qmk. => It read the current time
-  recording_timer = timer_read();
-}
-
-// Listener function => Triggered when the macro recording is stopped.
-void dynamic_macro_record_end_user(int8_t direction) {
-  isRecording = false;
-  isRecordingLedOn = false;
-}
-
-
-// LEDs, top left key is ID 6
-// I assume the first 6 are on the back of the board
-
 // Define some colours as 3 int arrays
 #define _PASS_ {-1, -1, -1}
 #define CL_OFF {0, 0, 0}
@@ -187,6 +179,7 @@ void dynamic_macro_record_end_user(int8_t direction) {
 
 #ifdef KEYBOARD_boardsource_equals_48
 // Define an 2d array of RGB LED colours with rows and columns
+
 const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
   [_QWERTY] = {
     {CL_BLU, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_RED}, 
@@ -225,15 +218,7 @@ const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
     {CL_OFF, CL_OFF, CL_MAG, CL_MAG, CL_MAG, CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_OFF, CL_OFF}, 
   },
 };
-#endif
 
-bool caps_word_active = false;
-void caps_word_set_user(bool active) {caps_word_active = active;}
-
-uint8_t mods_active = 0;
-void oneshot_mods_changed_user(uint8_t mods) {mods_active = mods;}
-
-#ifdef KEYBOARD_boardsource_equals_48
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
   // loop over all values between led_min and led_max
   // setting the colour of each LED to the colour of the corresponding key
@@ -296,3 +281,16 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 void suspend_power_down_kb(void) {rgb_matrix_set_suspend_state(true);}
 void suspend_wakeup_init_kb(void) {rgb_matrix_set_suspend_state(false);}
 #endif
+
+
+void keyboard_post_init_user(void) {
+  set_single_persistent_default_layer(_QWERTY);
+  #ifdef KEYBOARD_planck_rev6_drop
+    clear_backlight();
+  #endif
+  #ifdef KEYBOARD_boardsource_equals_48
+    // Default LEDs off, no animations or backlight
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(HSV_OFF);
+  #endif
+}
