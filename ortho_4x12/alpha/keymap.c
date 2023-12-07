@@ -16,6 +16,10 @@ enum layers {
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
+void clear_backlight(void) {
+  rgblight_disable_noeeprom();
+}
+
 void set_backlight_for_layer(uint8_t hue, uint8_t sat, uint8_t val) {
   rgblight_enable_noeeprom();
   rgblight_sethsv_noeeprom(hue, sat, val);
@@ -42,7 +46,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         set_backlight_for_layer(HSV_CYAN);
         break;
       default:
-        rgblight_disable_noeeprom();
+        clear_backlight();
         break;
     }
   #endif
@@ -112,6 +116,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void keyboard_post_init_user(void) {
+  set_single_persistent_default_layer(_QWERTY);
+  clear_backlight();
   #ifdef KEYBOARD_boardsource_equals_48
     // Default LEDs off, no animations or backlight
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
