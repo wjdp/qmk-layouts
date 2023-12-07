@@ -117,7 +117,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 void keyboard_post_init_user(void) {
   set_single_persistent_default_layer(_QWERTY);
-  clear_backlight();
+  #ifdef KEYBOARD_planck_rev6_drop
+    clear_backlight();
+  #endif
   #ifdef KEYBOARD_boardsource_equals_48
     // Default LEDs off, no animations or backlight
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
