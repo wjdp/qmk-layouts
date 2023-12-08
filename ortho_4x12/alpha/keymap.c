@@ -28,6 +28,9 @@ enum keycodes {
   QWERTY = SAFE_RANGE,
   BACKLIT,
   WP_TODO,
+  WP_SPCL, // left space
+  WP_SPCR, // right space
+  WP_SPCC, // print space counts
 };
 
 // Tap dance definitions
@@ -44,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN,    KC_BSPC,
   ESCKEY,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,       KC_QUOT,
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    KC_ENT,
-  OSM_SFT, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   KC_SPC,  KC_SPC,  RAISE,   MO(_WM), XXXXXXX, XXXXXXX,    KC_RGHT
+  OSM_SFT, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO(_WM), XXXXXXX, XXXXXXX,    KC_RGHT
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   UK_GRV,   KC_EXLM,  KC_HOME,       KC_UP,    KC_END,         TD(TD_SYM3), TD(TD_SYM4), KC_AMPR,  KC_ASTR,       KC_LCBR,     KC_RCBR,      _______,
@@ -62,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  LCTL(KC_BSPC),
   QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, XXXXXXX, KC_VOLU, KC_LSFT, KC_LCTL, XXXXXXX, KC_PSCR, LALT(KC_BSPC),
   XXXXXXX, AU_ON,   AU_OFF,  XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
 [_WM] = LAYOUT_ortho_4x12(
   XXXXXXX, I3_WS_5, I3_WS_6, I3_WS_7, I3_WS_8, XXXXXXX, XXXXXXX, I3_WS_15, I3_WS_16, I3_WS_17, I3_WS_18, XXXXXXX,
@@ -145,6 +148,17 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 static float disabled_key_sound[][2] = SONG(AG_NORM_SOUND);
 bool pressed_disabled_key = false;
 
+uint32_t count_space_left = 0;
+uint32_t count_space_right = 0;
+
+void handle_space(keyrecord_t *record) {
+  if (record->event.pressed) {
+    register_code(KC_SPC);
+  } else if (record->event.pressed == false) {
+    unregister_code(KC_SPC);
+  }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case XXXXXXX:
@@ -156,6 +170,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       } else if (record->event.pressed == false) {
         pressed_disabled_key = false;
       }
+      return false;
+    case WP_SPCL:
+      count_space_left += record->event.pressed ? 1 : 0;
+      handle_space(record);
+      return true;
+    case WP_SPCR:
+      count_space_right += record->event.pressed ? 1 : 0;
+      handle_space(record);
+      return true;
+    case WP_SPCC:
+      if (record->event.pressed) {
+        // build a string reporting the values of the space counters        
+        char space_count_str[32];
+        sprintf(space_count_str, "Left: %lu, Right: %lu", count_space_left, count_space_right);
+        SEND_STRING(space_count_str);
+      }
+      return true;
     default:
       return true;
   }
