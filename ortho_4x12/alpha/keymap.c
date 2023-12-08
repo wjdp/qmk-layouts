@@ -42,24 +42,40 @@ tap_dance_action_t tap_dance_actions[] = {
   [TD_RDBR] = ACTION_TAP_DANCE_DOUBLE(UK_RBRC, UK_RABK),
 };
 
+// Custom key names to keep the keymap readable
+#define WP_WRDL LCTL(KC_LEFT)
+#define WP_WRDR LCTL(KC_RGHT)
+#define WP_SYM3 TD(TD_SYM3)
+#define WP_SYM4 TD(TD_SYM4)
+#define WP_LDBR TD(TD_LDBR)
+#define WP_RDBR TD(TD_RDBR)
+
+// Custom key names for the keypad keys
+// QMK should probably have these
+#define KP_AST KC_KP_ASTERISK
+#define KP_SLSH KC_KP_SLASH
+#define KP_PLUS KC_KP_PLUS
+#define KP_EQL KC_KP_EQUAL
+#define KP_MINS KC_KP_MINUS
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_ortho_4x12(
-  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN,    KC_BSPC,
-  ESCKEY,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,       KC_QUOT,
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,    KC_ENT,
-  OSM_SFT, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO(_WM), XXXXXXX, XXXXXXX,    KC_RGHT
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN, KC_BSPC,
+  ESCKEY,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,    KC_QUOT,
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
+  OSM_SFT, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO(_WM), XXXXXXX, XXXXXXX, KC_RGHT
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
-  UK_GRV,   KC_EXLM,  KC_HOME,       KC_UP,    KC_END,         TD(TD_SYM3), TD(TD_SYM4), KC_AMPR,  KC_ASTR,       KC_LCBR,     KC_RCBR,      _______,
-  KC_BSPC,  KC_ENTER, KC_LEFT,       KC_DOWN,  KC_RIGHT,       KC_UNDS,     KC_COLN,     KC_MINUS, KC_EQUAL,      KC_LPRN,     KC_RPRN,      UK_DQUO,
-  _______,  UK_BSLS,  LCTL(KC_LEFT), XXXXXXX,  LCTL(KC_RIGHT), UK_PIPE,     KC_PLUS,     UK_HASH,  UK_TILD,       TD(TD_LDBR), TD(TD_RDBR),  _______,
-  _______,  _______,  _______,       _______,  _______,        _______,     _______,     _______,  LSFT(KC_RALT), KC_LALT,      _______,      CW_TOGG
+  UK_GRV,  KC_EXLM, KC_HOME, KC_UP,   KC_END,  WP_SYM3, WP_SYM4, KC_AMPR, KC_ASTR, KC_LCBR, KC_RCBR, _______,
+  KC_BSPC, KC_ENT,  KC_LEFT, KC_DOWN, KC_RGHT, KC_UNDS, KC_COLN, KC_MINS, KC_EQL,  KC_LPRN, KC_RPRN, UK_DQUO,
+  _______, UK_BSLS, WP_WRDL, XXXXXXX, WP_WRDR, UK_PIPE, KC_PLUS, UK_HASH, UK_TILD, WP_LDBR, WP_RDBR, _______,
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_LSFT, KC_LALT, _______, CW_TOGG
 ),
 [_RAISE] = LAYOUT_ortho_4x12(
-  _______,  KC_F1,    KC_F2,         KC_F3,    KC_F4,          KC_NO,       KC_KP_ASTERISK, KC_7,     KC_8,  KC_9,   KC_KP_MINUS,  _______,
-  _______,  KC_F5,    KC_F6,         KC_F7,    KC_F8,          KC_NO,       KC_KP_SLASH,    KC_4,     KC_5,  KC_6,   KC_0,         KC_DELETE,
-  _______,  KC_F9,    KC_F10,        KC_F11,   KC_F12,         KC_NO,       KC_EQUAL,       KC_1,     KC_2,  KC_3,   KC_KP_PLUS,   _______,
-  _______,  _______,  _______,       _______,  _______,        _______,     _______,        _______,  KC_0,  KC_DOT, _______,      KC_CAPS_LOCK
+  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_NO,   KP_AST,  KC_7,    KC_8,    KC_9,    KP_MINS, _______,
+  _______, KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_NO,   KP_SLSH, KC_4,    KC_5,    KC_6,    KC_0,    KC_DEL,
+  _______, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NO,   KP_EQL,  KC_1,    KC_2,    KC_3,    KP_PLUS, _______,
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_0,    KC_DOT,  _______, KC_CAPS
 ),
 [_ADJUST] = LAYOUT_ortho_4x12(
   XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  LCTL(KC_BSPC),
@@ -68,10 +84,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
 [_WM] = LAYOUT_ortho_4x12(
-  XXXXXXX, I3_WS_5, I3_WS_6, I3_WS_7, I3_WS_8, XXXXXXX, XXXXXXX, I3_WS_15, I3_WS_16, I3_WS_17, I3_WS_18, XXXXXXX,
-  XXXXXXX, I3_WS_1, I3_WS_2, I3_WS_3, I3_WS_4, I3_WS_A, I3_WS_B, I3_WS_11, I3_WS_12, I3_WS_13, I3_WS_14, XXXXXXX,
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     I3_TERM,
-  XXXXXXX, XXXXXXX, XXXXXXX, KC_LALT, I3_LAST, I3_WIND, I3_WIND, I3_UGNT, XXXXXXX, XXXXXXX, XXXXXXX,     XXXXXXX
+  XXXXXXX, I3_WS5,  I3_WS6,  I3_WS7,  I3_WS8,  XXXXXXX, XXXXXXX, I3_WS15, I3_WS16, I3_WS17, I3_WS18, XXXXXXX,
+  XXXXXXX, I3_WS1,  I3_WS2,  I3_WS3,  I3_WS4,  I3_WS_A, I3_WS_B, I3_WS11, I3_WS12, I3_WS13, I3_WS14, XXXXXXX,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, I3_TERM,
+  XXXXXXX, XXXXXXX, XXXXXXX, KC_LALT, I3_LAST, I3_WIND, I3_WIND, I3_UGNT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
 [_MOUSE] = LAYOUT_ortho_4x12(
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_WH_U, KC_MS_U, KC_WH_D, KC_PGUP, XXXXXXX,
