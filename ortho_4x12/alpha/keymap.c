@@ -50,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   UK_GRV,   KC_EXLM,  KC_HOME,       KC_UP,    KC_END,         TD(TD_SYM3), TD(TD_SYM4), KC_AMPR,  KC_ASTR,       KC_LCBR,     KC_RCBR,      _______,
   KC_BSPC,  KC_ENTER, KC_LEFT,       KC_DOWN,  KC_RIGHT,       KC_UNDS,     KC_COLN,     KC_MINUS, KC_EQUAL,      KC_LPRN,     KC_RPRN,      UK_DQUO,
   _______,  UK_BSLS,  LCTL(KC_LEFT), XXXXXXX,  LCTL(KC_RIGHT), UK_PIPE,     KC_PLUS,     UK_HASH,  UK_TILD,       TD(TD_LDBR), TD(TD_RDBR),  _______,
-  _______,  _______,  _______,       _______,  _______,        _______,     _______,     _______,  LSFT(KC_RALT), _______,     _______,      CW_TOGG
+  _______,  _______,  _______,       _______,  _______,        _______,     _______,     _______,  LSFT(KC_RALT), KC_LALT,      _______,      CW_TOGG
 ),
 [_RAISE] = LAYOUT_ortho_4x12(
   _______,  KC_F1,    KC_F2,         KC_F3,    KC_F4,          KC_NO,       KC_KP_ASTERISK, KC_7,     KC_8,  KC_9,   KC_KP_MINUS,  _______,
@@ -59,8 +59,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,  _______,  _______,       _______,  _______,        _______,     _______,        _______,  KC_0,  KC_DOT, _______,      KC_CAPS_LOCK
 ),
 [_ADJUST] = LAYOUT_ortho_4x12(
-  XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  XXXXXXX,
-  QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, XXXXXXX, KC_VOLU, KC_LSFT, KC_LCTL, XXXXXXX, KC_PSCR, XXXXXXX,
+  XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  LCTL(KC_BSPC),
+  QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, XXXXXXX, KC_VOLU, KC_LSFT, KC_LCTL, XXXXXXX, KC_PSCR, LALT(KC_BSPC),
   XXXXXXX, AU_ON,   AU_OFF,  XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
@@ -164,44 +164,50 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Define some colours as 3 int arrays
 #define _PASS_ {-1, -1, -1}
-#define CL_OFF {0, 0, 0}
-#define CL_RED {168, 18, 10}
-#define CL_REC {255, 5, 5}
-#define CL_PLY {21, 230, 33}
-#define CL_GRN {21, 163, 33}
-#define CL_BLU {35, 57, 219}
-#define CL_YEL {238, 242, 7}
-#define CL_MAG {255, 0, 255}
-#define CL_FFF {255, 255, 255}
-#define CL_CYN {0, 255, 255}
-#define CL_VUP {100, 255, 50}
-#define CL_VDN {255, 100, 50}
+#define CL_OFF {0, 0, 0}       // Off
+#define CL_RED {190, 18, 10}   // Red
+#define CL_GRN {21, 163, 33}   // Green
+#define CL_BLU {35, 57, 219}   // Blue
+#define CL_YEL {238, 242, 7}   // Yellow
+#define CL_ORG {242, 144, 7}   // Orange
+#define CL_MAG {255, 0, 255}   // Magenta
+#define CL_FFF {255, 255, 255} // White
+#define CL_CYN {0, 255, 255}   // Cyan
+
+#define CL_DEL {168, 18, 10}   // Delete or backspace
+#define CL_REC {255, 5, 5}     // Record macro
+#define CL_PLY {21, 255, 33}   // Play macro
+#define CL_SP1 {240, 98, 50}   // Speed (slow)
+#define CL_SP2 {245, 82, 27}   // Speed (medium)
+#define CL_SP3 {250, 67, 5}    // Speed (fast)
+#define CL_VUP {100, 255, 50}  // Volume up
+#define CL_VDN {255, 100, 50}  // Volume down
 
 #ifdef KEYBOARD_boardsource_equals_48
 // Define an 2d array of RGB LED colours with rows and columns
 
 const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
   [_QWERTY] = {
-    {CL_BLU, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_RED}, 
+    {CL_BLU, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_DEL}, 
     {CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF}, 
     {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_BLU}, 
     {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF}, 
   }, 
   [_LOWER] = {
-    {CL_GRN, CL_GRN, CL_BLU, CL_YEL, CL_BLU, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_RED}, 
-    {CL_RED, CL_BLU, CL_YEL, CL_YEL, CL_YEL, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN}, 
+    {CL_GRN, CL_GRN, CL_BLU, CL_YEL, CL_BLU, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_DEL}, 
+    {CL_DEL, CL_BLU, CL_YEL, CL_YEL, CL_YEL, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN}, 
     {_PASS_, CL_GRN, CL_YEL, CL_OFF, CL_YEL, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_BLU}, 
-    {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_GRN, CL_GRN, CL_GRN, CL_OFF, CL_YEL, CL_OFF, CL_OFF, {RGB_MAGENTA}}, 
+    {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_GRN, CL_GRN, CL_GRN, CL_OFF, CL_YEL, CL_FFF, CL_OFF, {RGB_MAGENTA}}, 
   }, 
   [_RAISE] = {
-    {CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_GRN, CL_FFF, CL_FFF, CL_FFF, CL_GRN, CL_RED}, 
-    {CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_GRN, CL_FFF, CL_FFF, CL_FFF, CL_FFF, CL_RED}, 
+    {CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_GRN, CL_FFF, CL_FFF, CL_FFF, CL_GRN, CL_DEL}, 
+    {CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_GRN, CL_FFF, CL_FFF, CL_FFF, CL_FFF, CL_DEL}, 
     {_PASS_, CL_YEL, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_GRN, CL_FFF, CL_FFF, CL_FFF, CL_GRN, CL_BLU}, 
     {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_FFF, CL_FFF, CL_OFF, {RGB_YELLOW}}, 
   },
   [_ADJUST] = {
-    {CL_OFF, CL_RED, CL_FFF, CL_BLU, CL_FFF, CL_REC, CL_REC, CL_PLY, CL_PLY, CL_OFF, CL_FFF, CL_OFF}, 
-    {CL_RED, CL_OFF, CL_BLU, CL_BLU, CL_BLU, CL_OFF, CL_VUP, CL_FFF, CL_FFF, CL_OFF, CL_FFF, CL_OFF}, 
+    {CL_OFF, CL_RED, CL_FFF, CL_BLU, CL_FFF, CL_REC, CL_REC, CL_PLY, CL_PLY, CL_OFF, CL_FFF, CL_DEL}, 
+    {CL_RED, CL_OFF, CL_BLU, CL_BLU, CL_BLU, CL_OFF, CL_VUP, CL_FFF, CL_FFF, CL_OFF, CL_FFF, CL_DEL}, 
     {_PASS_, CL_VUP, CL_VDN, CL_OFF, CL_OFF, CL_OFF, CL_VDN, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF}, 
     {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_OFF, CL_OFF, CL_OFF, CL_OFF}, 
   },
@@ -215,7 +221,7 @@ const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
     {CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_FFF, CL_YEL, CL_FFF, CL_BLU, CL_OFF}, 
     {CL_YEL, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_FFF, CL_YEL, CL_YEL, CL_YEL, CL_BLU, CL_OFF}, 
     {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_CYN, CL_CYN, CL_OFF, CL_OFF, CL_OFF, CL_OFF}, 
-    {CL_OFF, CL_OFF, CL_MAG, CL_MAG, CL_MAG, CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_OFF, CL_OFF}, 
+    {CL_OFF, CL_OFF, CL_SP1, CL_SP2, CL_SP3, CL_OFF, CL_ORG, CL_ORG, CL_ORG, CL_OFF, CL_OFF, CL_OFF}, 
   },
 };
 
