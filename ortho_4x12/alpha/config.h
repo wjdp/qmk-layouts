@@ -50,7 +50,7 @@
 #define LEADER_TIMEOUT 300
 
 // For tap-dance
-#define TAPPING_TERM 175
+#define TAPPING_TERM 165
 
 // Mouse keys
 #define MOUSEKEY_DELAY 10
