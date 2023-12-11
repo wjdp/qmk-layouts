@@ -70,11 +70,21 @@ tap_dance_action_t tap_dance_actions[] = {
 #define MT_P LALT_T(KC_P)
 
 // Mod taps in the lower layer
-#define MT_R1 LSFT_T(KC_MINS)
-#define MT_R2 LCTL_T(KC_EQL)
-#define MT_R3 LGUI_T(KC_LPRN)
-#define MT_R4 LALT_T(KC_RPRN)
+#define MTL_R1 LSFT_T(KC_MINS)
+#define MTL_R2 LCTL_T(KC_EQL)
+#define MTL_R3 LGUI_T(KC_LPRN) // does not work well as brackets are fake keys that send a shifted keypress
+#define MTL_R4 LALT_T(KC_RPRN) // with mod-tap this misbehaves https://github.com/qmk/qmk_firmware/issues/2440
 
+// Mod taps in the raise layer, left hand
+#define MTR_L1 MT(MOD_LALT, KC_F5)
+#define MTR_L2 MT(MOD_LGUI, KC_F6)
+#define MTR_L3 MT(MOD_LCTL, KC_F7)
+#define MTR_L4 MT(MOD_LSFT, KC_F8)
+// Mod taps in the raise layer, right hand
+#define MTR_R1 MT(MOD_LSFT, KC_4)
+#define MTR_R2 MT(MOD_LCTL, KC_5)
+#define MTR_R3 MT(MOD_LGUI, KC_6)
+#define MTR_R4 MT(MOD_LALT, KC_0)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_ortho_4x12(
@@ -85,13 +95,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   UK_GRV,  KC_EXLM, KC_HOME, KC_UP,   KC_END,  WP_SYM3, WP_SYM4, KC_AMPR, KC_ASTR, KC_LCBR, KC_RCBR, _______,
-  KC_BSPC, KC_ENT,  KC_LEFT, KC_DOWN, KC_RGHT, KC_UNDS, KC_COLN, MT_R1,   MT_R2,   MT_R3,   MT_R4,   UK_DQUO,
+  KC_BSPC, KC_ENT,  KC_LEFT, KC_DOWN, KC_RGHT, KC_UNDS, KC_COLN, MTL_R1,  MTL_R2,  KC_LPRN, KC_RPRN, UK_DQUO,
   _______, UK_BSLS, WP_WRDL, XXXXXXX, WP_WRDR, UK_PIPE, KC_PLUS, UK_HASH, UK_TILD, WP_LDBR, WP_RDBR, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, KC_LSFT, KC_LALT, _______, CW_TOGG
 ),
 [_RAISE] = LAYOUT_ortho_4x12(
   _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_NO,   KP_AST,  KC_7,    KC_8,    KC_9,    KP_MINS, _______,
-  _______, KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_NO,   KP_SLSH, KC_4,    KC_5,    KC_6,    KC_0,    KC_DEL,
+  _______, MTR_L1,  MTR_L2,  MTR_L3,  MTR_L4,  KC_NO,   KP_SLSH, MTR_R1,  MTR_R2,  MTR_R3,  MTR_R4,   KC_DEL,
   _______, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NO,   KP_EQL,  KC_1,    KC_2,    KC_3,    KP_PLUS, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, KC_0,    KC_DOT,  _______, KC_CAPS
 ),
