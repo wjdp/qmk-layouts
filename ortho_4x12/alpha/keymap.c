@@ -69,6 +69,12 @@ tap_dance_action_t tap_dance_actions[] = {
 #define MT_L LGUI_T(KC_L)
 #define MT_P LALT_T(KC_P)
 
+// Mod taps in the lower layer
+#define MT_R1 LSFT_T(KC_MINS)
+#define MT_R2 LCTL_T(KC_EQL)
+#define MT_R3 LGUI_T(KC_LPRN)
+#define MT_R4 LALT_T(KC_RPRN)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_ortho_4x12(
@@ -79,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   UK_GRV,  KC_EXLM, KC_HOME, KC_UP,   KC_END,  WP_SYM3, WP_SYM4, KC_AMPR, KC_ASTR, KC_LCBR, KC_RCBR, _______,
-  KC_BSPC, KC_ENT,  KC_LEFT, KC_DOWN, KC_RGHT, KC_UNDS, KC_COLN, KC_MINS, KC_EQL,  KC_LPRN, KC_RPRN, UK_DQUO,
+  KC_BSPC, KC_ENT,  KC_LEFT, KC_DOWN, KC_RGHT, KC_UNDS, KC_COLN, MT_R1,   MT_R2,   MT_R3,   MT_R4,   UK_DQUO,
   _______, UK_BSLS, WP_WRDL, XXXXXXX, WP_WRDR, UK_PIPE, KC_PLUS, UK_HASH, UK_TILD, WP_LDBR, WP_RDBR, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, KC_LSFT, KC_LALT, _______, CW_TOGG
 ),
