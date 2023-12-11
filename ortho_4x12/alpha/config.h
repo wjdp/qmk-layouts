@@ -51,6 +51,7 @@
 
 // For tap-dance
 #define TAPPING_TERM 165
+#define QUICK_TAP_TERM 0
 
 // Mouse keys
 #define MOUSEKEY_DELAY 10
