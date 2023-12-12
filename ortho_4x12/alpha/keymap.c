@@ -3,6 +3,7 @@
 #include QMK_KEYBOARD_H
 #include "keymap_uk.h"
 #include "keys.h"
+#include "sounds.h"
 
 enum layers {
   _QWERTY,
@@ -31,6 +32,7 @@ enum keycodes {
   WP_SPCL, // left space
   WP_SPCR, // right space
   WP_SPCC, // print space counts
+  WP_SNG1, // song 1
 };
 
 // Tap dance definitions
@@ -202,6 +204,8 @@ void handle_space(keyrecord_t *record) {
   }
 }
 
+float song[][2] = SONG(WP_RICK_ROLL);
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case XXXXXXX:
@@ -228,6 +232,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         char space_count_str[32];
         sprintf(space_count_str, "Left: %lu, Right: %lu", count_space_left, count_space_right);
         SEND_STRING(space_count_str);
+      }
+      return true;
+    case WP_SNG1:
+      if (record->event.pressed) {
+        PLAY_SONG(song);
       }
       return true;
     default:
