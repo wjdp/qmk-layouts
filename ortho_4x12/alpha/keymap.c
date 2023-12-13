@@ -12,6 +12,9 @@ enum layers {
   _ADJUST,
   _WM,
   _MOUSE,
+  _DEBUG,
+  _GAME,
+  _GAME_LOWER,
 };
 
 #define LOWER MO(_LOWER)
@@ -88,12 +91,36 @@ tap_dance_action_t tap_dance_actions[] = {
 #define MTR_R3 MT(MOD_LGUI, KC_6)
 #define MTR_R4 MT(MOD_LALT, KC_0)
 
+// Keys for debugger in JetBrains IDEs
+#define DB_STOP C(KC_F2)
+#define DB_RUN C(KC_F5)
+#define DB_RESM KC_F9
+#define DB_STOV KC_F8 // Step over
+#define DB_STIN KC_F7 // Step into
+#define DB_STMY A(S(KC_F7)) // Step into my code
+#define DB_STOU S(KC_F6) // Step out
+#define DB_EXPT A(KC_F10) // Exec point
+#define DB_JUMP A(S(KC_9)) // Jump to cursor
+
+// Layer switching
+#define MO_WM MO(_WM)
+#define TO_HOME TO(_QWERTY)
+#define DF_HOME DF(_QWERTY)
+#define TO_DEBG TO(_DEBUG)
+#define TO_GAME TO(_GAME)
+#define DF_GAME DF(_GAME)
+#define MO_GLOW MO(_GAME_LOWER)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+//  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+//  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+// Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+//  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
 [_QWERTY] = LAYOUT_ortho_4x12(
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN, KC_BSPC,
   ESCKEY,  MT_A,    MT_S,    MT_D,    MT_F,    KC_G,    KC_H,    MT_J,    MT_K,    MT_L,    MT_P,    KC_QUOT,
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
-  OSM_SFT, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO(_WM), XXXXXXX, WP_SNG1, KC_RGHT
+  OSM_SFT, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO_WM,   XXXXXXX, WP_SNG1, KC_RGHT
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   UK_GRV,  KC_EXLM, KC_HOME, KC_UP,   KC_END,  WP_SYM3, WP_SYM4, KC_AMPR, KC_ASTR, KC_LCBR, KC_RCBR, _______,
@@ -101,6 +128,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, UK_BSLS, WP_WRDL, XXXXXXX, WP_WRDR, UK_PIPE, KC_PLUS, UK_HASH, UK_TILD, WP_LDBR, WP_RDBR, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, KC_LSFT, KC_LALT, _______, CW_TOGG
 ),
+//  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+//  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+// Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+//  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
 [_RAISE] = LAYOUT_ortho_4x12(
   _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_NO,   KP_AST,  KC_7,    KC_8,    KC_9,    KP_MINS, _______,
   _______, MTR_L1,  MTR_L2,  MTR_L3,  MTR_L4,  KC_NO,   KP_SLSH, MTR_R1,  MTR_R2,  MTR_R3,  MTR_R4,  KC_DEL,
@@ -111,8 +142,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  XXXXXXX,
   QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, DT_UP,   KC_VOLU, KC_LSFT, KC_LCTL, XXXXXXX, KC_PSCR, XXXXXXX,
   XXXXXXX, AU_ON,   AU_OFF,  XXXXXXX, DT_PRNT, DT_DOWN, KC_VOLD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, TO_DEBG, TO_GAME, XXXXXXX, XXXXXXX
 ),
+//  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+//  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+// Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+//  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
 [_WM] = LAYOUT_ortho_4x12(
   XXXXXXX, I3_WS5,  I3_WS6,  I3_WS7,  I3_WS8,  XXXXXXX, XXXXXXX, I3_WS15, I3_WS16, I3_WS17, I3_WS18, XXXXXXX,
   XXXXXXX, I3_WS1,  I3_WS2,  I3_WS3,  I3_WS4,  I3_WS_A, I3_WS_B, I3_WS11, I3_WS12, I3_WS13, I3_WS14, XXXXXXX,
@@ -124,6 +159,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LCTL, KC_MS_L, KC_MS_D, KC_MS_R, KC_PGDN, XXXXXXX,
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_WBAK, KC_WFWD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   XXXXXXX, XXXXXXX, KC_ACL0, KC_ACL1, KC_ACL2, KC_BTN1, KC_BTN1, KC_BTN2, KC_BTN3, XXXXXXX, XXXXXXX, XXXXXXX
+),
+//  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+//  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+// Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+//  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
+[_DEBUG] = LAYOUT_ortho_4x12(
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DB_EXPT, DB_JUMP, XXXXXXX, XXXXXXX, XXXXXXX,
+  TO_HOME, DB_STOP, XXXXXXX, DB_RUN,  DB_RESM, XXXXXXX, XXXXXXX, DB_STOV, DB_STIN, DB_STMY, DB_STOU, XXXXXXX,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+),
+[_GAME] = LAYOUT_ortho_4x12(
+  XXXXXXX, XXXXXXX, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MO_GLOW, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+),
+//  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+//  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+// Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+//  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
+[_GAME_LOWER] = LAYOUT_ortho_4x12(
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, TO_HOME
 ),
 };
 
@@ -181,6 +242,13 @@ layer_state_t layer_state_set_user(layer_state_t state) {
       case _MOUSE:
         set_backlight_for_layer(HSV_CYAN);
         break;
+      case _DEBUG:
+        set_backlight_for_layer(HSV_CYAN);
+        break;
+      case _GAME:
+      case _GAME_LOWER:
+        set_backlight_for_layer(HSV_GREEN);
+        break;
       default:
         clear_backlight();
         break;
@@ -205,6 +273,9 @@ void handle_space(keyrecord_t *record) {
 }
 
 float song[][2] = SONG(WP_RICK_ROLL);
+float song_layer_debug[][2] = SONG(PREONIC_SOUND);
+float song_layer_game[][2] = SONG(WP_ONE_UP_SOUND);
+float song_layer_home[][2] = SONG(STARTUP_SOUND);
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -235,9 +306,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return true;
     case WP_SNG1:
-      if (record->event.pressed) {
-        PLAY_SONG(song);
-      }
+      if (record->event.pressed) {PLAY_SONG(song);}
+      return true;
+    case TO_DEBG:
+      if (record->event.pressed) {PLAY_SONG(song_layer_debug);}
+      return true;
+    case TO_GAME:
+      if (record->event.pressed) {PLAY_SONG(song_layer_game);}
+      return true;
+    case TO_HOME:
+      if (record->event.pressed) {PLAY_SONG(song_layer_home);}
       return true;
     default:
       return true;
@@ -258,6 +336,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #define CL_CYN {0, 255, 255}   // Cyan
 
 #define CL_DEL {168, 18, 10}   // Delete or backspace
+#define CL_ESC {255, 0, 0}     // Exit or escape
 #define CL_REC {255, 5, 5}     // Record macro
 #define CL_PLY {21, 255, 33}   // Play macro
 #define CL_SP1 {240, 98, 50}   // Speed (slow)
@@ -272,42 +351,80 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Define an 2d array of RGB LED colours with rows and columns
 
 const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
-  [_QWERTY] = {
-    {CL_BLU, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_DEL},
-    {CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF},
-    {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_BLU},
-    {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF},
-  }, 
-  [_LOWER] = {
-    {CL_GRN, CL_GRN, CL_BLU, CL_YEL, CL_BLU, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_DEL},
-    {CL_DEL, CL_BLU, CL_YEL, CL_YEL, CL_YEL, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN},
-    {_PASS_, CL_GRN, CL_YEL, CL_OFF, CL_YEL, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_GRN, CL_BLU},
-    {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_GRN, CL_GRN, CL_GRN, CL_OFF, CL_YEL, CL_FFF, CL_OFF, {RGB_MAGENTA}},
-  }, 
-  [_RAISE] = {
-    {CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_GRN, CL_FFF, CL_FFF, CL_FFF, CL_GRN, CL_DEL},
-    {CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_GRN, CL_FFF, CL_FFF, CL_FFF, CL_FFF, CL_DEL},
-    {_PASS_, CL_YEL, CL_YEL, CL_YEL, CL_YEL, CL_OFF, CL_GRN, CL_FFF, CL_FFF, CL_FFF, CL_GRN, CL_BLU},
-    {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_YEL, CL_YEL, CL_YEL, CL_FFF, CL_FFF, CL_OFF, {RGB_YELLOW}},
-  },
-  [_ADJUST] = {
-    {CL_OFF, CL_RED, CL_FFF, CL_BLU, CL_FFF, CL_REC, CL_REC, CL_PLY, CL_PLY, CL_OFF, CL_FFF, CL_OFF},
-    {CL_RED, CL_OFF, CL_BLU, CL_BLU, CL_BLU, CL_TUP, CL_VUP, CL_FFF, CL_FFF, CL_OFF, CL_FFF, CL_OFF},
-    {_PASS_, CL_VUP, CL_VDN, CL_OFF, CL_PLY, CL_TDN, CL_VDN, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF},
-    {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_OFF, CL_OFF, CL_OFF, CL_OFF},
-  },
-  [_WM] = {
-    {CL_OFF, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_OFF, CL_OFF, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_OFF},
-    {CL_OFF, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_BLU, CL_OFF},
-    {CL_FFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_CYN},
-    {CL_OFF, CL_OFF, CL_OFF, CL_FFF, CL_MAG, CL_MAG, CL_MAG, CL_RED, CL_MAG, CL_OFF, CL_OFF, CL_OFF},
-  },
-  [_MOUSE] = {
-    {CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_FFF, CL_YEL, CL_FFF, CL_BLU, CL_OFF},
-    {CL_YEL, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_FFF, CL_YEL, CL_YEL, CL_YEL, CL_BLU, CL_OFF},
-    {_PASS_, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_OFF, CL_CYN, CL_CYN, CL_OFF, CL_OFF, CL_OFF, CL_OFF},
-    {CL_OFF, CL_OFF, CL_SP1, CL_SP2, CL_SP3, CL_OFF, CL_ORG, CL_ORG, CL_ORG, CL_OFF, CL_OFF, CL_OFF},
-  },
+ //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+ //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+ // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+ //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
+[_QWERTY] = {
+  {CL_BLU,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_DEL},
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_BLU},
+  {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+}, 
+[_LOWER] = {
+  {CL_GRN,  CL_GRN,  CL_BLU,  CL_YEL,  CL_BLU,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_DEL},
+  {CL_DEL,  CL_BLU,  CL_YEL,  CL_YEL,  CL_YEL,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN},
+  {_PASS_,  CL_GRN,  CL_YEL,  CL_OFF,  CL_YEL,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_BLU},
+  {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_GRN,  CL_GRN,  CL_GRN,  CL_OFF,  CL_YEL,  CL_FFF,  CL_OFF,  {RGB_MAGENTA}},
+},
+ //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+ //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+ // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+ //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
+[_RAISE] = {
+  {CL_OFF,  CL_YEL,  CL_YEL,  CL_YEL,  CL_YEL,  CL_OFF,  CL_GRN,  CL_FFF,  CL_FFF,  CL_FFF,  CL_GRN,  CL_DEL},
+  {CL_OFF,  CL_YEL,  CL_YEL,  CL_YEL,  CL_YEL,  CL_OFF,  CL_GRN,  CL_FFF,  CL_FFF,  CL_FFF,  CL_FFF,  CL_DEL},
+  {_PASS_,  CL_YEL,  CL_YEL,  CL_YEL,  CL_YEL,  CL_OFF,  CL_GRN,  CL_FFF,  CL_FFF,  CL_FFF,  CL_GRN,  CL_BLU},
+  {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_YEL,  CL_YEL,  CL_YEL,  CL_FFF,  CL_FFF,  CL_OFF,  {RGB_YELLOW}},
+},
+[_ADJUST] = {
+  {CL_OFF,  CL_RED,  CL_FFF,  CL_BLU,  CL_FFF,  CL_REC,  CL_REC,  CL_PLY,  CL_PLY,  CL_OFF,  CL_FFF,  CL_OFF},
+  {CL_ESC,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_TUP,  CL_VUP,  CL_FFF,  CL_FFF,  CL_OFF,  CL_FFF,  CL_OFF},
+  {_PASS_,  CL_VUP,  CL_VDN,  CL_OFF,  CL_PLY,  CL_TDN,  CL_VDN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_GRN,  CL_OFF,  CL_OFF},
+},
+ //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+ //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+ // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+ //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
+[_WM] = {
+  {CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF},
+  {CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF},
+  {CL_FFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_CYN},
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_FFF,  CL_MAG,  CL_MAG,  CL_MAG,  CL_RED,  CL_MAG,  CL_OFF,  CL_OFF,  CL_OFF},
+},
+[_MOUSE] = {
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_FFF,  CL_YEL,  CL_FFF,  CL_BLU,  CL_OFF},
+  {CL_YEL,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_FFF,  CL_YEL,  CL_YEL,  CL_YEL,  CL_BLU,  CL_OFF},
+  {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_CYN,  CL_CYN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_OFF,  CL_OFF,  CL_SP1,  CL_SP2,  CL_SP3,  CL_OFF,  CL_ORG,  CL_ORG,  CL_ORG,  CL_OFF,  CL_OFF,  CL_OFF},
+},
+ //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+ //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+ // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+ //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
+[_DEBUG] = {
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_ESC,  CL_RED,  CL_OFF,  CL_PLY,  CL_GRN,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF},
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+},
+[_GAME] = {
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_GRN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_ESC,  CL_OFF,  CL_GRN,  CL_GRN,  CL_GRN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+},
+ //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
+ //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
+ // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
+ //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
+[_GAME_LOWER] = {
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_YEL,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_OFF,  CL_OFF,  CL_YEL,  CL_YEL,  CL_YEL,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_ESC},
+},
 };
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
