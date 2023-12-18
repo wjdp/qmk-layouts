@@ -141,7 +141,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_ADJUST] = LAYOUT_ortho_4x12(
   XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  XXXXXXX,
   QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, DT_UP,   KC_VOLU, KC_LSFT, KC_LCTL, XXXXXXX, KC_PSCR, XXXXXXX,
-  XXXXXXX, AU_ON,   AU_OFF,  XXXXXXX, DT_PRNT, DT_DOWN, KC_VOLD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  XXXXXXX, AU_ON,   AU_OFF,  XXXXXXX, DT_PRNT, DT_DOWN, KC_VOLD, KC_MPLY, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX,
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, TO_DEBG, TO_GAME, XXXXXXX, XXXXXXX
 ),
 //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
@@ -331,7 +331,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #define CL_BLU {35, 57, 219}   // Blue
 #define CL_YEL {238, 242, 7}   // Yellow
 #define CL_ORG {242, 144, 7}   // Orange
-#define CL_MAG {255, 0, 255}   // Magenta
+#define CL_MAG {242, 12, 242}   // Magenta
 #define CL_FFF {255, 255, 255} // White
 #define CL_CYN {0, 255, 255}   // Cyan
 
@@ -380,7 +380,7 @@ const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
 [_ADJUST] = {
   {CL_OFF,  CL_RED,  CL_FFF,  CL_BLU,  CL_FFF,  CL_REC,  CL_REC,  CL_PLY,  CL_PLY,  CL_OFF,  CL_FFF,  CL_OFF},
   {CL_ESC,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_TUP,  CL_VUP,  CL_FFF,  CL_FFF,  CL_OFF,  CL_FFF,  CL_OFF},
-  {_PASS_,  CL_VUP,  CL_VDN,  CL_OFF,  CL_PLY,  CL_TDN,  CL_VDN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
+  {_PASS_,  CL_VUP,  CL_VDN,  CL_OFF,  CL_PLY,  CL_TDN,  CL_VDN,  CL_MAG,  CL_MAG,  CL_MAG,  CL_OFF,  CL_OFF},
   {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_GRN,  CL_OFF,  CL_OFF},
 },
  //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
