@@ -64,32 +64,32 @@ tap_dance_action_t tap_dance_actions[] = {
 #define KP_MINS KC_KP_MINUS
 
 // Mod tap keys, left hand
-#define MT_A LALT_T(KC_A)
-#define MT_S LGUI_T(KC_S)
-#define MT_D LCTL_T(KC_D)
-#define MT_F LSFT_T(KC_F)
+#define MT_A LSFT_T(KC_A)
+#define MT_S LALT_T(KC_S)
+#define MT_D LGUI_T(KC_D)
+#define MT_F LCTL_T(KC_F)
 // Mod tap keys, right hand
-#define MT_J LSFT_T(KC_J)
-#define MT_K LCTL_T(KC_K)
-#define MT_L LGUI_T(KC_L)
-#define MT_P LALT_T(KC_P)
+#define MT_J LCTL_T(KC_J)
+#define MT_K LGUI_T(KC_K)
+#define MT_L LALT_T(KC_L)
+#define MT_P LSFT_T(KC_P)
 
 // Mod taps in the lower layer
-#define MTL_R1 LSFT_T(KC_MINS)
-#define MTL_R2 LCTL_T(KC_EQL)
-#define MTL_R3 LGUI_T(KC_LPRN) // does not work well as brackets are fake keys that send a shifted keypress
-#define MTL_R4 LALT_T(KC_RPRN) // with mod-tap this misbehaves https://github.com/qmk/qmk_firmware/issues/2440
+#define MTL_R1 LSFT_T(KC_MINS) // I've put shift here as I want to use with arrow keys
+#define MTL_R2 LGUI_T(KC_EQL)  // Unused, there's not really much use for super on the lower layer
+#define MTL_R3 LALT_T(KC_LPRN) // does not work well as brackets are fake keys that send a shifted keypress
+#define MTL_R4 LSFT_T(KC_RPRN) // with mod-tap this misbehaves https://github.com/qmk/qmk_firmware/issues/2440
 
 // Mod taps in the raise layer, left hand
-#define MTR_L1 MT(MOD_LALT, KC_F5)
-#define MTR_L2 MT(MOD_LGUI, KC_F6)
-#define MTR_L3 MT(MOD_LCTL, KC_F7)
-#define MTR_L4 MT(MOD_LSFT, KC_F8)
+#define MTR_L1 MT(MOD_LSFT, KC_F5)
+#define MTR_L2 MT(MOD_LALT, KC_F6)
+#define MTR_L3 MT(MOD_LGUI, KC_F7)
+#define MTR_L4 MT(MOD_LCTL, KC_F8)
 // Mod taps in the raise layer, right hand
-#define MTR_R1 MT(MOD_LSFT, KC_4)
-#define MTR_R2 MT(MOD_LCTL, KC_5)
-#define MTR_R3 MT(MOD_LGUI, KC_6)
-#define MTR_R4 MT(MOD_LALT, KC_0)
+#define MTR_R1 MT(MOD_LCTL, KC_4)
+#define MTR_R2 MT(MOD_LGUI, KC_5)
+#define MTR_R3 MT(MOD_LALT, KC_6)
+#define MTR_R4 MT(MOD_LSFT, KC_0)
 
 // Keys for debugger in JetBrains IDEs
 #define DB_STOP C(KC_F2)
@@ -124,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   UK_GRV,  KC_EXLM, KC_HOME, KC_UP,   KC_END,  WP_SYM3, WP_SYM4, KC_AMPR, KC_ASTR, KC_LCBR, KC_RCBR, _______,
-  KC_BSPC, KC_ENT,  KC_LEFT, KC_DOWN, KC_RGHT, KC_UNDS, KC_COLN, MTL_R1,  MTL_R2,  KC_LPRN, KC_RPRN, UK_DQUO,
+  KC_BSPC, KC_ENT,  KC_LEFT, KC_DOWN, KC_RGHT, KC_UNDS, KC_COLN, MTL_R1,  KC_EQL,  KC_LPRN, KC_RPRN, UK_DQUO,
   _______, UK_BSLS, WP_WRDL, XXXXXXX, WP_WRDR, UK_PIPE, KC_PLUS, UK_HASH, UK_TILD, WP_LDBR, WP_RDBR, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, KC_LSFT, KC_LALT, _______, CW_TOGG
 ),
