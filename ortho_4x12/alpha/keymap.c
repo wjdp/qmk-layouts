@@ -133,9 +133,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
 //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
 [_RAISE] = LAYOUT_ortho_4x12(
-  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_NO,   KP_AST,  KC_7,    KC_8,    KC_9,    KP_MINS, _______,
-  _______, MTR_L1,  MTR_L2,  MTR_L3,  MTR_L4,  KC_NO,   KP_SLSH, MTR_R1,  MTR_R2,  MTR_R3,  MTR_R4,  KC_DEL,
-  _______, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NO,   KP_EQL,  KC_1,    KC_2,    KC_3,    KP_PLUS, _______,
+  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_NO,   KP_AST,  KC_7,    KC_8,    KC_9,    KP_SLSH, _______,
+  _______, MTR_L1,  MTR_L2,  MTR_L3,  MTR_L4,  KC_NO,   KP_MINS, MTR_R1,  MTR_R2,  MTR_R3,  MTR_R4,  KC_DEL,
+  _______, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NO,   KP_PLUS, KC_1,    KC_2,    KC_3,    KP_EQL, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, KC_0,    KC_DOT,  _______, KC_CAPS
 ),
 [_ADJUST] = LAYOUT_ortho_4x12(
