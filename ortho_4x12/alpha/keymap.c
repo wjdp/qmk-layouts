@@ -13,8 +13,10 @@ enum layers {
   _WM,
   _MOUSE,
   _DEBUG,
-  _GAME,
+  _GAME_WASD,
+  _GAME_ESDF,
   _GAME_LOWER,
+  _GAME_RAISE,
 };
 
 #define LOWER MO(_LOWER)
@@ -107,9 +109,10 @@ tap_dance_action_t tap_dance_actions[] = {
 #define TO_HOME TO(_QWERTY)
 #define DF_HOME DF(_QWERTY)
 #define TO_DEBG TO(_DEBUG)
-#define TO_GAME TO(_GAME)
-#define DF_GAME DF(_GAME)
+#define TO_WASD TO(_GAME_WASD)
+#define TO_ESDF TO(_GAME_ESDF)
 #define MO_GLOW MO(_GAME_LOWER)
+#define MO_GRSE MO(_GAME_RAISE)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
@@ -142,7 +145,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  XXXXXXX,
   QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, DT_UP,   KC_VOLU, KC_LSFT, KC_LCTL, XXXXXXX, KC_PSCR, XXXXXXX,
   XXXXXXX, AU_ON,   AU_OFF,  XXXXXXX, DT_PRNT, DT_DOWN, KC_VOLD, KC_MPLY, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX,
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, TO_DEBG, TO_GAME, XXXXXXX, XXXXXXX
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, TO_DEBG, TO_WASD, TO_ESDF, XXXXXXX
 ),
 //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
 //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
@@ -170,11 +173,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
-[_GAME] = LAYOUT_ortho_4x12(
+[_GAME_WASD] = LAYOUT_ortho_4x12(
   KC_TAB,  KC_Y,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_SCLN, KC_BSPC,
   KC_ESC,  KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,    KC_QUOTE,
   KC_G,    KC_B,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
-  XXXXXXX, XXXXXXX, KC_LALT, KC_LCTL, MO_GLOW, KC_SPC,  KC_SPC,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, I3_WN_R
+  XXXXXXX, XXXXXXX, KC_LALT, KC_LCTL, MO_GLOW, KC_SPC,  KC_SPC,  MO_GRSE, XXXXXXX, XXXXXXX, XXXXXXX, I3_WN_R
+),
+[_GAME_ESDF] = LAYOUT_ortho_4x12(
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN, KC_BSPC,
+  KC_ESC,  MT(MOD_LSFT, KC_A),    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,    KC_QUOT,
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
+  XXXXXXX, XXXXXXX, KC_LALT, KC_LCTL, MO_GLOW, KC_SPC,  KC_SPC,  MO_GRSE, XXXXXXX, XXXXXXX, XXXXXXX, I3_WN_R
 ),
 //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
 //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
@@ -186,6 +195,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    _______, _______, _______,
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, TO_HOME
 ),
+[_GAME_RAISE] = LAYOUT_ortho_4x12(
+  _______, _______, _______, _______, _______, _______, _______, KC_7,    KC_8,    KC_9,    _______, _______,
+  _______, _______, _______, _______, _______, _______, _______, KC_4,    KC_5,    KC_6,    KC_0,    _______,
+  _______, _______, _______, _______, _______, _______, _______, KC_1,    KC_2,    KC_3,    _______, _______,
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, TO_HOME
+),
 };
 
 bool isRecording = false;
@@ -194,17 +209,19 @@ bool isRecordingLedOn = false;
 static uint16_t recording_timer;
 
 // Listener function => Triggered when you start recording a macro.
-void dynamic_macro_record_start_user(int8_t direction) {
+bool dynamic_macro_record_start_user(int8_t direction) {
   isRecording = true;
   isRecordingLedOn = true;
   // timer_read() is a built-in function in qmk. => It read the current time
   recording_timer = timer_read();
+  return true;
 }
 
 // Listener function => Triggered when the macro recording is stopped.
-void dynamic_macro_record_end_user(int8_t direction) {
+bool dynamic_macro_record_end_user(int8_t direction) {
   isRecording = false;
   isRecordingLedOn = false;
+  return true;
 }
 
 bool caps_word_active = false;
@@ -245,8 +262,10 @@ layer_state_t layer_state_set_user(layer_state_t state) {
       case _DEBUG:
         set_backlight_for_layer(HSV_CYAN);
         break;
-      case _GAME:
+      case _GAME_WASD:
+      case _GAME_ESDF:
       case _GAME_LOWER:
+      case _GAME_RAISE:
         set_backlight_for_layer(HSV_GREEN);
         break;
       default:
@@ -311,7 +330,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case TO_DEBG:
       if (record->event.pressed) {PLAY_SONG(song_layer_debug);}
       return true;
-    case TO_GAME:
+    case TO_WASD:
+    case TO_ESDF:
       if (record->event.pressed) {PLAY_SONG(song_layer_game);}
       return true;
     case TO_HOME:
@@ -409,7 +429,7 @@ const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
   {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
   {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
 },
-[_GAME] = {
+[_GAME_WASD] = {
   {CL_OFF,  CL_OFF,  CL_OFF,  CL_GRN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
   {CL_ESC,  CL_OFF,  CL_GRN,  CL_GRN,  CL_GRN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
   {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
