@@ -268,6 +268,14 @@ layer_state_t layer_state_set_user(layer_state_t state) {
       case _GAME_RAISE:
         set_backlight_for_layer(HSV_GREEN);
         break;
+      case _QWERTY:
+        bool caps = host_keyboard_led_state().caps_lock;
+        if (caps) {
+          set_backlight_for_layer(HSV_YELLOW);
+        } else {
+          clear_backlight();
+        }
+        break;
       default:
         clear_backlight();
         break;
