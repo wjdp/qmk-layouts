@@ -123,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN, KC_BSPC,
   ESCKEY,  MT_A,    MT_S,    MT_D,    MT_F,    KC_G,    KC_H,    MT_J,    MT_K,    MT_L,    MT_P,    KC_QUOT,
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
-  OSM_SFT, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO_WM,   KC_APP,  KC_RALT, KC_RGHT
+  CW_TOGG, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO_WM,   KC_APP,  KC_RALT, KC_RGHT
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   UK_GRV,  KC_EXLM, KC_HOME, KC_UP,   KC_END,  WP_SYM3, WP_SYM4, KC_AMPR, KC_ASTR, KC_LCBR, KC_RCBR, _______,
@@ -138,13 +138,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT_ortho_4x12(
   _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_NO,   KP_AST,  KC_7,    KC_8,    KC_9,    KP_SLSH, _______,
   _______, MTR_L1,  MTR_L2,  MTR_L3,  MTR_L4,  KC_NO,   KP_MINS, MTR_R1,  MTR_R2,  MTR_R3,  MTR_R4,  KC_DEL,
-  _______, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NO,   KP_PLUS, KC_1,    KC_2,    KC_3,    KP_EQL, _______,
-  _______, _______, _______, _______, _______, _______, _______, _______, KC_0,    KC_DOT,  _______, KC_CAPS
+  _______, KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NO,   KP_PLUS, KC_1,    KC_2,    KC_3,    KP_EQL,  _______,
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_0,    KC_DOT,  _______, _______
 ),
 [_ADJUST] = LAYOUT_ortho_4x12(
   XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  XXXXXXX,
   QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, DT_UP,   KC_VOLU, KC_LSFT, KC_LCTL, XXXXXXX, KC_PSCR, XXXXXXX,
-  XXXXXXX, AU_ON,   AU_OFF,  XXXXXXX, DT_PRNT, DT_DOWN, KC_VOLD, KC_MPLY, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX,
+  KC_CAPS, AU_ON,   AU_OFF,  XXXXXXX, DT_PRNT, DT_DOWN, KC_VOLD, KC_MPLY, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX,
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, TO_DEBG, TO_WASD, TO_ESDF, XXXXXXX
 ),
 //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
