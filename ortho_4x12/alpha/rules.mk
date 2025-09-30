@@ -7,3 +7,6 @@ DYNAMIC_MACRO_ENABLE = yes
 DYNAMIC_MACRO_DELAY = 5
 DYNAMIC_MACRO_NO_NESTING = yes
 DYNAMIC_TAPPING_TERM_ENABLE = yes
+
+# Include custom source files
+SRC += zsa.c

@@ -53,7 +53,13 @@
 #define TAPPING_TERM 200
 #define QUICK_TAP_TERM 0
 
-// Mouse keys
+// Mouse keys - undefine first to override library defaults
+
+#undef MOUSEKEY_DELAY // because ZSA
+#undef MOUSEKEY_MAX_SPEED // because ZSA
+#undef MOUSEKEY_TIME_TO_MAX // because ZSA
+#undef MOUSEKEY_WHEEL_DELAY // because ZSA
+
 #define MOUSEKEY_DELAY 10
 #define MOUSEKEY_INTERVAL 20
 #define MOUSEKEY_MOVE_DELTA 8

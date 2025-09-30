@@ -38,6 +38,7 @@ enum keycodes {
   WP_SPCR, // right space
   WP_SPCC, // print space counts
   WP_SNG1, // song 1
+  ZSA_LL, // ZSA led level
 };
 
 // Tap dance definitions
@@ -145,7 +146,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  XXXXXXX,
   QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, DT_UP,   KC_VOLU, KC_LSFT, KC_LCTL, XXXXXXX, KC_PSCR, XXXXXXX,
   KC_CAPS, AU_ON,   AU_OFF,  XXXXXXX, DT_PRNT, DT_DOWN, KC_VOLD, KC_MPLY, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX,
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, TO_DEBG, TO_WASD, TO_ESDF, XXXXXXX
+  XXXXXXX, ZSA_LL,  XXXXXXX,XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, TO_DEBG, TO_WASD, TO_ESDF, XXXXXXX
 ),
 //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
 //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
@@ -155,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, I3_WS5,  I3_WS6,  I3_WS7,  I3_WS8,  XXXXXXX, XXXXXXX, I3_WS15, I3_WS16, I3_WS17, I3_WS18, XXXXXXX,
   XXXXXXX, I3_WS1,  I3_WS2,  I3_WS3,  I3_WS4,  XXXXXXX, XXXXXXX, I3_WS11, I3_WS12, I3_WS13, I3_WS14, XXXXXXX,
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, I3_WS_A, I3_WS_B, I3_TERM,
-  XXXXXXX, XXXXXXX, XXXXXXX, KC_LALT, I3_LAST, I3_WIND, I3_WIND, I3_UGNT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+  XXXXXXX, XXXXXXX, XXXXXXX, KC_LALT, I3_LAST, XXXXXXX, XXXXXXX, I3_UGNT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
 [_MOUSE] = LAYOUT_ortho_4x12(
   XXXXXXX, KC_1,    KC_2,    KC_3,    XXXXXXX, XXXXXXX, XXXXXXX, MS_WHLU, MS_UP,   MS_WHLD, KC_PGUP, XXXXXXX,
@@ -345,6 +346,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case TO_HOME:
       if (record->event.pressed) {PLAY_SONG(song_layer_home);}
       return true;
+    case ZSA_LL:
+      #ifdef KEYBOARD_zsa_planck_ez
+        if (record->event.pressed) {
+          keyboard_config.led_level++;
+          if (keyboard_config.led_level > 4) {
+            keyboard_config.led_level = 0;
+          }
+          planck_ez_right_led_level((uint8_t)keyboard_config.led_level * 255 / 4 );
+          planck_ez_left_led_level((uint8_t)keyboard_config.led_level * 255 / 4 );
+          eeconfig_update_kb(keyboard_config.raw);
+          layer_state_set_kb(layer_state);
+        }
+      #endif
+      return true;
     default:
       return true;
   }
@@ -375,10 +390,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #define CL_TUP {214, 255, 50}  // Tapping term up
 #define CL_TDN {255, 156, 50}  // Tapping term down
 
-#ifdef KEYBOARD_boardsource_equals_48
+#if defined(KEYBOARD_boardsource_equals_48) || defined(KEYBOARD_zsa_planck_ez)
 // Define an 2d array of RGB LED colours with rows and columns
 
-const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
+#define KB_ROWS 4
+#define KB_COLS 12
+
+const uint8_t PROGMEM colourmaps[][KB_ROWS][KB_COLS][3] = {
  //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
  //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
  // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
@@ -409,7 +427,7 @@ const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
   {CL_OFF,  CL_RED,  CL_FFF,  CL_BLU,  CL_FFF,  CL_REC,  CL_REC,  CL_PLY,  CL_PLY,  CL_OFF,  CL_FFF,  CL_OFF},
   {CL_ESC,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_TUP,  CL_VUP,  CL_FFF,  CL_FFF,  CL_OFF,  CL_FFF,  CL_OFF},
   {_PASS_,  CL_VUP,  CL_VDN,  CL_OFF,  CL_PLY,  CL_TDN,  CL_VDN,  CL_MAG,  CL_MAG,  CL_MAG,  CL_OFF,  CL_OFF},
-  {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_GRN,  CL_OFF,  CL_OFF},
+  {_PASS_,  CL_FFF,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_GRN,  CL_GRN,  CL_OFF},
 },
  //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
  //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
@@ -417,8 +435,8 @@ const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
  //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
 [_WM] = {
   {CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF},
-  {CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF},
-  {CL_FFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_CYN},
+  {CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF},
+  {CL_FFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_CYN},
   {CL_OFF,  CL_OFF,  CL_OFF,  CL_FFF,  CL_MAG,  CL_MAG,  CL_MAG,  CL_RED,  CL_MAG,  CL_OFF,  CL_OFF,  CL_OFF},
 },
 [_MOUSE] = {
@@ -455,21 +473,57 @@ const uint8_t PROGMEM colourmaps[][MATRIX_ROWS][MATRIX_COLS][3] = {
 },
 };
 
+#if defined(KEYBOARD_zsa_planck_ez)
+const uint8_t led_to_matrix[][2] PROGMEM = {
+  {0, 0}, {0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}, {4, 0}, {4, 1}, {4, 2}, {4, 3}, {4, 4}, {4, 5},
+  {1, 0}, {1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}, {5, 0}, {5, 1}, {5, 2}, {5, 3}, {5, 4}, {5, 5},
+  {2, 0}, {2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}, {6, 0}, {6, 1}, {6, 2}, {6, 3}, {6, 4}, {6, 5},
+  {3, 0}, {3, 1}, {3, 2}, {7, 3}, {7, 4}, {7, 5}, {7, 5}, {7, 0}, {7, 1}, {7, 2}, {3, 3}, {3, 4}
+};
+#endif
+
+// Function to get LED index for a given keymap position
+uint8_t get_led_index(uint8_t row, uint8_t col) {
+  #if defined(KEYBOARD_zsa_planck_ez)
+  // Add bounds checking to prevent undefined behavior
+  if (row >= KB_ROWS || col >= KB_COLS) {
+    return 0; // Return invalid LED index
+  }
+  
+  // Calculate the index in the led_to_matrix array
+  uint8_t led_index = row * KB_COLS + col;
+  
+  // Check if the LED index is valid
+  if (led_index >= sizeof(led_to_matrix) / sizeof(led_to_matrix[0])) {
+    return 0; // Return invalid LED index
+  }
+  
+  // Get the matrix coordinates from the mapping
+  uint8_t matrix_row = pgm_read_byte(&led_to_matrix[led_index][0]);
+  uint8_t matrix_col = pgm_read_byte(&led_to_matrix[led_index][1]);
+  
+  // Return the LED index from the matrix coordinates
+  return g_led_config.matrix_co[matrix_row][matrix_col];
+  #else
+  return g_led_config.matrix_co[row][col];
+  #endif
+}
+
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
   // loop over all values between led_min and led_max
   // setting the colour of each LED to the colour of the corresponding key
   int layer = get_highest_layer(layer_state);
-  for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-    for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
+  for (uint8_t row = 0; row < KB_ROWS; ++row) {
+    for (uint8_t col = 0; col < KB_COLS; ++col) {
         if (colourmaps[layer][row][col][0] == -1) continue; // skip if no colour (i.e. _PASS_)
-        uint8_t index = g_led_config.matrix_co[row][col];
+        uint8_t index = get_led_index(row, col);
         rgb_matrix_set_color(
           index, 
           colourmaps[layer][row][col][0], colourmaps[layer][row][col][1], colourmaps[layer][row][col][2]
         );
     }
   }
-  uint8_t capsIndex = g_led_config.matrix_co[2][0];
+  uint8_t capsIndex = get_led_index(2, 0);
   if (caps_word_active) {
     rgb_matrix_set_color(capsIndex, RGB_MAGENTA);
   } else if (host_keyboard_led_state().caps_lock) {
@@ -478,7 +532,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     rgb_matrix_set_color(capsIndex, RGB_OFF);
   }
 
-  uint8_t osmShiftIndex = g_led_config.matrix_co[3][0];
+  uint8_t osmShiftIndex = get_led_index(3,0);
   if (mods_active & MOD_MASK_SHIFT) {
     rgb_matrix_set_color(osmShiftIndex, RGB_MAGENTA);
   } else {
@@ -487,10 +541,10 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
   // If a disabled key is pressed, turn all disabled keys red
   if (pressed_disabled_key) {
-    for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-      for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-        uint8_t index = g_led_config.matrix_co[row][col];
+    for (uint8_t row = 0; row < KB_ROWS; ++row) {
+      for (uint8_t col = 0; col < KB_COLS; ++col) {
         if (keymap_key_to_keycode(layer, (keypos_t){col,row}) == XXXXXXX) {
+          uint8_t index = get_led_index(row, col);
           rgb_matrix_set_color(index, RGB_RED);
         }
       }
@@ -505,8 +559,8 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
       recording_timer = timer_read();
     }
     if (isRecordingLedOn) {
-      rgb_matrix_set_color(g_led_config.matrix_co[3][4], RGB_RED);
-      rgb_matrix_set_color(g_led_config.matrix_co[3][7], RGB_RED);
+      rgb_matrix_set_color(get_led_index(3,4), RGB_RED);
+      rgb_matrix_set_color(get_led_index(3,7), RGB_RED);
     }
   }
 
@@ -521,10 +575,10 @@ void suspend_wakeup_init_kb(void) {rgb_matrix_set_suspend_state(false);}
 
 void keyboard_post_init_user(void) {
   set_single_persistent_default_layer(_QWERTY);
-  #ifdef KEYBOARD_planck_rev6_drop
+  #if KEYBOARD_planck_rev6_drop
     clear_backlight();
   #endif
-  #ifdef KEYBOARD_boardsource_equals_48
+  #if defined(KEYBOARD_boardsource_equals_48) || defined(KEYBOARD_zsa_planck_ez)
     // Default LEDs off, no animations or backlight
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
     rgb_matrix_sethsv_noeeprom(HSV_OFF);
