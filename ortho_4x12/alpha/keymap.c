@@ -425,8 +425,8 @@ const uint8_t PROGMEM colourmaps[][KB_ROWS][KB_COLS][3] = {
 },
 [_ADJUST] = {
   {CL_OFF,  CL_RED,  CL_FFF,  CL_BLU,  CL_FFF,  CL_REC,  CL_REC,  CL_PLY,  CL_PLY,  CL_OFF,  CL_FFF,  CL_OFF},
-  {CL_ESC,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_TUP,  CL_VUP,  CL_FFF,  CL_FFF,  CL_OFF,  CL_FFF,  CL_OFF},
-  {_PASS_,  CL_VUP,  CL_VDN,  CL_OFF,  CL_PLY,  CL_TDN,  CL_VDN,  CL_MAG,  CL_MAG,  CL_MAG,  CL_OFF,  CL_OFF},
+  {CL_ESC,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_TUP,  CL_VUP,  CL_FFF,  CL_OFF,  CL_OFF,  CL_FFF,  CL_OFF},
+  {_PASS_,  CL_VUP,  CL_VDN,  CL_OFF,  CL_PLY,  CL_TDN,  CL_VDN,  CL_MAG,  CL_MAG,  CL_MAG,  CL_CYN,  CL_OFF},
   {_PASS_,  CL_FFF,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_GRN,  CL_GRN,  CL_OFF},
 },
  //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
