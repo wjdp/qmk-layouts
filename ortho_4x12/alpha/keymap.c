@@ -12,7 +12,6 @@ enum layers {
   _ADJUST,
   _WM,
   _MOUSE,
-  _DEBUG,
   _GAME_WASD,
   _GAME_ESDF,
   _GAME_LOWER,
@@ -94,22 +93,10 @@ tap_dance_action_t tap_dance_actions[] = {
 #define MTR_R3 MT(MOD_LALT, KC_6)
 #define MTR_R4 MT(MOD_LSFT, KC_0)
 
-// Keys for debugger in JetBrains IDEs
-#define DB_STOP C(KC_F2)
-#define DB_RUN C(KC_F5)
-#define DB_RESM KC_F9
-#define DB_STOV KC_F8 // Step over
-#define DB_STIN KC_F7 // Step into
-#define DB_STMY A(S(KC_F7)) // Step into my code
-#define DB_STOU S(KC_F6) // Step out
-#define DB_EXPT A(KC_F10) // Exec point
-#define DB_JUMP A(S(KC_9)) // Jump to cursor
-
 // Layer switching
 #define MO_WM MO(_WM)
 #define TO_HOME TO(_QWERTY)
 #define DF_HOME DF(_QWERTY)
-#define TO_DEBG TO(_DEBUG)
 #define TO_WASD TO(_GAME_WASD)
 #define TO_ESDF TO(_GAME_ESDF)
 #define MO_GLOW MO(_GAME_LOWER)
@@ -146,7 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, I3_QUIT, I3_WS_L, I3_WN_U, I3_WS_R, DM_REC1, DM_REC2, DM_PLY1, DM_PLY2, XXXXXXX, KC_INS,  XXXXXXX,
   QK_BOOT, XXXXXXX, I3_WN_L, I3_WN_D, I3_WN_R, DT_UP,   KC_VOLU, KC_LCTL, XXXXXXX, XXXXXXX, KC_LSFT, XXXXXXX,
   KC_CAPS, AU_ON,   AU_OFF,  XXXXXXX, DT_PRNT, DT_DOWN, KC_VOLD, KC_MPLY, KC_MPRV, KC_MNXT, KC_PSCR, XXXXXXX,
-  XXXXXXX, ZSA_LL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, TO_DEBG, TO_WASD, TO_ESDF, XXXXXXX
+  XXXXXXX, ZSA_LL,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, WP_SPCC, XXXXXXX, XXXXXXX, TO_WASD, TO_ESDF, XXXXXXX
 ),
 //  Tab  |    Q   |    W   |    E   |    R   |    T   |    Y   |    U   |    I   |    O   |    ;   |  Bksp
 //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
@@ -168,12 +155,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
 // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
 //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
-[_DEBUG] = LAYOUT_ortho_4x12(
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DB_EXPT, DB_JUMP, XXXXXXX, XXXXXXX, XXXXXXX,
-  TO_HOME, DB_STOP, XXXXXXX, DB_RUN,  DB_RESM, XXXXXXX, XXXXXXX, DB_STOV, DB_STIN, DB_STMY, DB_STOU, XXXXXXX,
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-),
 [_GAME_WASD] = LAYOUT_ortho_4x12(
   KC_TAB,  KC_Y,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_SCLN, KC_BSPC,
   KC_ESC,  KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_H,    KC_J,    KC_K,    KC_L,    KC_P,    KC_QUOTE,
@@ -260,9 +241,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
       case _MOUSE:
         set_backlight_for_layer(HSV_CYAN);
         break;
-      case _DEBUG:
-        set_backlight_for_layer(HSV_CYAN);
-        break;
       case _GAME_WASD:
       case _GAME_ESDF:
       case _GAME_LOWER:
@@ -301,7 +279,6 @@ void handle_space(keyrecord_t *record) {
 }
 
 float song[][2] = SONG(WP_RICK_ROLL);
-float song_layer_debug[][2] = SONG(PREONIC_SOUND);
 float song_layer_game[][2] = SONG(WP_ONE_UP_SOUND);
 float song_layer_home[][2] = SONG(STARTUP_SOUND);
 
@@ -335,9 +312,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return true;
     case WP_SNG1:
       if (record->event.pressed) {PLAY_SONG(song);}
-      return true;
-    case TO_DEBG:
-      if (record->event.pressed) {PLAY_SONG(song_layer_debug);}
       return true;
     case TO_WASD:
     case TO_ESDF:
@@ -449,12 +423,6 @@ const uint8_t PROGMEM colourmaps[][KB_ROWS][KB_COLS][3] = {
  //  Esc  |    A   |    S   |    D   |    F   |    G   |    H   |    J   |    K   |    L   |    P   |  "
  // Shift |    Z   |    X   |    C   |    V   |    B   |    N   |    M   |    ,   |    .   |    /   |  Enter
  //  OSM  |  Alt   | Super  |  Ctrl  |  Lower |      Space      | Raise  |   WM   |    ?   |    ?   |  Right
-[_DEBUG] = {
-  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_OFF,  CL_OFF,  CL_OFF},
-  {CL_ESC,  CL_RED,  CL_OFF,  CL_PLY,  CL_GRN,  CL_OFF,  CL_OFF,  CL_BLU,  CL_BLU,  CL_BLU,  CL_BLU,  CL_OFF},
-  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
-  {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
-},
 [_GAME_WASD] = {
   {CL_OFF,  CL_OFF,  CL_OFF,  CL_GRN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
   {CL_ESC,  CL_OFF,  CL_GRN,  CL_GRN,  CL_GRN,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
