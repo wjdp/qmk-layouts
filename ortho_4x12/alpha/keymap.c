@@ -37,6 +37,7 @@ enum keycodes {
   WP_SPCR, // right space
   WP_SPCC, // print space counts
   WP_SNG1, // song 1
+  WP_VMESC, // virt-manager focus escape (LCTL+LALT tap)
   ZSA_LL, // ZSA led level
 };
 
@@ -111,7 +112,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN, KC_BSPC,
   ESCKEY,  MT_A,    MT_S,    MT_D,    MT_F,    KC_G,    KC_H,    MT_J,    MT_K,    MT_L,    MT_P,    KC_QUOT,
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
-  CW_TOGG, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO_WM,   KC_APP,  KC_RALT, KC_RGHT
+  WP_VMESC, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO_WM,   KC_APP,  KC_RALT, KC_RGHT
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   UK_GRV,  KC_EXLM, KC_HOME, KC_UP,   KC_END,  WP_SYM3, WP_SYM4, KC_AMPR, KC_ASTR, KC_LCBR, KC_RCBR, _______,
@@ -220,7 +221,7 @@ void clear_backlight(void) {
 void set_backlight_for_layer(uint8_t hue, uint8_t sat, uint8_t val) {
   rgblight_enable_noeeprom();
   rgblight_sethsv_noeeprom(hue, sat, val);
-} 
+}
 
 layer_state_t layer_state_set_user(layer_state_t state) {
   layer_state_t adjusted_state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
@@ -304,7 +305,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return true;
     case WP_SPCC:
       if (record->event.pressed) {
-        // build a string reporting the values of the space counters        
+        // build a string reporting the values of the space counters
         char space_count_str[32];
         sprintf(space_count_str, "Left: %lu, Right: %lu", count_space_left, count_space_right);
         SEND_STRING(space_count_str);
@@ -313,6 +314,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case WP_SNG1:
       if (record->event.pressed) {PLAY_SONG(song);}
       return true;
+    case WP_VMESC:
+      if (record->event.pressed) {
+        register_code(KC_LCTL);
+        register_code(KC_LALT);
+        wait_ms(50);
+        unregister_code(KC_LALT);
+        unregister_code(KC_LCTL);
+      }
+      return false;
     case TO_WASD:
     case TO_ESDF:
       if (record->event.pressed) {PLAY_SONG(song_layer_game);}
@@ -380,7 +390,7 @@ const uint8_t PROGMEM colourmaps[][KB_ROWS][KB_COLS][3] = {
   {CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
   {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_BLU},
   {_PASS_,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF,  CL_OFF},
-}, 
+},
 [_LOWER] = {
   {CL_GRN,  CL_GRN,  CL_BLU,  CL_YEL,  CL_BLU,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_DEL},
   {CL_DEL,  CL_BLU,  CL_YEL,  CL_YEL,  CL_YEL,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN,  CL_GRN},
@@ -457,19 +467,19 @@ uint8_t get_led_index(uint8_t row, uint8_t col) {
   if (row >= KB_ROWS || col >= KB_COLS) {
     return 0; // Return invalid LED index
   }
-  
+
   // Calculate the index in the led_to_matrix array
   uint8_t led_index = row * KB_COLS + col;
-  
+
   // Check if the LED index is valid
   if (led_index >= sizeof(led_to_matrix) / sizeof(led_to_matrix[0])) {
     return 0; // Return invalid LED index
   }
-  
+
   // Get the matrix coordinates from the mapping
   uint8_t matrix_row = pgm_read_byte(&led_to_matrix[led_index][0]);
   uint8_t matrix_col = pgm_read_byte(&led_to_matrix[led_index][1]);
-  
+
   // Return the LED index from the matrix coordinates
   return g_led_config.matrix_co[matrix_row][matrix_col];
   #else
@@ -486,7 +496,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         if (colourmaps[layer][row][col][0] == -1) continue; // skip if no colour (i.e. _PASS_)
         uint8_t index = get_led_index(row, col);
         rgb_matrix_set_color(
-          index, 
+          index,
           colourmaps[layer][row][col][0], colourmaps[layer][row][col][1], colourmaps[layer][row][col][2]
         );
     }
