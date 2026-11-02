@@ -37,7 +37,7 @@ enum keycodes {
   WP_SPCR, // right space
   WP_SPCC, // print space counts
   WP_SNG1, // song 1
-  WP_VMESC, // virt-manager focus escape (LCTL+LALT tap)
+  WP_VMSL, // scroll lock while held, virt-manager focus escape (LCTL+LALT tap) when tapped
   ZSA_LL, // ZSA led level
 };
 
@@ -112,7 +112,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_SCLN, KC_BSPC,
   ESCKEY,  MT_A,    MT_S,    MT_D,    MT_F,    KC_G,    KC_H,    MT_J,    MT_K,    MT_L,    MT_P,    KC_QUOT,
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
-  WP_VMESC, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO_WM,   KC_APP,  KC_RALT, KC_RGHT
+  WP_VMSL, KC_LALT, KC_LGUI, KC_LCTL, LOWER,   WP_SPCL, WP_SPCR, RAISE,   MO_WM,   KC_APP,  KC_RALT, KC_RGHT
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   UK_GRV,  KC_EXLM, KC_HOME, KC_UP,   KC_END,  WP_SYM3, WP_SYM4, KC_AMPR, KC_ASTR, KC_LCBR, KC_RCBR, _______,
@@ -314,15 +314,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case WP_SNG1:
       if (record->event.pressed) {PLAY_SONG(song);}
       return true;
-    case WP_VMESC:
+    case WP_VMSL: {
+      static uint32_t pressed_at;
       if (record->event.pressed) {
-        register_code(KC_LCTL);
-        register_code(KC_LALT);
-        wait_ms(50);
-        unregister_code(KC_LALT);
-        unregister_code(KC_LCTL);
+        pressed_at = timer_read32();
+        register_code(KC_SCRL);
+      } else {
+        unregister_code(KC_SCRL);
+        if (timer_elapsed32(pressed_at) < GET_TAPPING_TERM(keycode, record)) {
+          register_code(KC_LCTL);
+          register_code(KC_LALT);
+          wait_ms(50);
+          unregister_code(KC_LALT);
+          unregister_code(KC_LCTL);
+        }
       }
       return false;
+    }
     case TO_WASD:
     case TO_ESDF:
       if (record->event.pressed) {PLAY_SONG(song_layer_game);}
